@@ -1,0 +1,66 @@
+/* ===== HEADER ===== */
+.navbar {
+    background: #2c3e50;
+    padding: 14px 40px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-image {
+    width: 40px;
+    height: 40px;
+}
+
+.logo .text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* NAV */
+.navbar nav a {
+    margin-left: 24px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.navbar nav a:hover {
+    color: #1abc9c;
+}
+
+/* ACTIVE MENU */
+.navbar nav a.active {
+    color: #1abc9c;
+    font-weight: 600;
+}
+
+.navbar nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background: #1abc9c;
+    transition: width 0.3s ease;
+}
+
+.navbar nav a.active::after,
+.navbar nav a:hover::after {
+    width: 100%;
+}

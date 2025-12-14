@@ -1,0 +1,40 @@
+/* ===== FOOTER ===== */
+.site-footer {
+    background: #2c3e50;
+    color: #fff;
+    padding: 40px;
+}
+
+.footer-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+.footer-col h4 {
+    margin-bottom: 10px;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 6px;
+}
+
+.footer-col a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.footer-col a:hover {
+    color: #1abc9c;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #ccc;
+}
