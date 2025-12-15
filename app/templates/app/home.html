@@ -1,99 +1,205 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LibraryHub - Trang chủ</title>
-    <link rel="stylesheet" href="../static/css/header.css">
-    <link rel="stylesheet" href="../static/css/footer.css">
-    <link rel="stylesheet" href="../static/css/home.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 </head>
 <body>
 
 <!-- ===== HEADER ===== -->
 <header class="navbar">
     <div class="logo">
-        <img src="../static/images/library-icon.png" alt="LibraryHub Logo" class="logo-image">
+        <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
         <span class="text">LibraryHub</span>
     </div>
 
     <nav>
-        <a href="home.html" class="active">Trang chủ</a>
-        <a href="resouces.html">Tài nguyên</a>
-        <a href="login_signup.html">Cá nhân</a>
+        <a href="{% url 'home' %}" class="active">Trang chủ</a>
+        <a href="">Tài nguyên</a>
+        <a href="">Cá nhân</a>
     </nav>
 </header>
 
 <!-- ===== MAIN ===== -->
 <main class="main-content">
+
+    <!-- BANNER -->
     <section class="banner-slider">
-    <div class="slides">
-        <div class="slide active">
-            <img src="../static/images/banner1.jpg" alt="Banner 1">
-            <div class="caption">
-                <h2>Chào mừng đến LibraryHub</h2>
-                <p>Kho tri thức mở dành cho mọi người</p>
+        <div class="slides">
+
+            <div class="slide active">
+                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 1">
+                <div class="caption">
+                    <h2>Chào mừng đến LibraryHub</h2>
+                    <p>Kho tri thức mở dành cho mọi người</p>
+                </div>
             </div>
+
+            <div class="slide">
+                <img src="{% static 'images/banner2.jpg' %}" alt="Banner 2">
+                <div class="caption">
+                    <h2>Học tập mọi lúc</h2>
+                    <p>Truy cập tài nguyên mọi nơi</p>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 3">
+                <div class="caption">
+                    <h2>Thư viện số</h2>
+                    <p>Hàng nghìn sách và tài liệu</p>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="{% static 'images/banner2.jpg' %}" alt="Banner 4">
+                <div class="caption">
+                    <h2>Chia sẻ tri thức</h2>
+                    <p>Kết nối cộng đồng học tập</p>
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 5">
+                <div class="caption">
+                    <h2>Khám phá ngay</h2>
+                    <p>Bắt đầu hành trình học tập</p>
+                </div>
+            </div>
+
         </div>
 
-        <div class="slide">
-            <img src="/static/images/banner2.jpg" alt="Banner 2">
-            <div class="caption">
-                <h2>Học tập mọi lúc</h2>
-                <p>Truy cập tài nguyên mọi nơi</p>
+        <!-- DOTS -->
+        <div class="dots">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="search-section">
+        <div class="search-box">
+            <form class="search-form" method="get">
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Nhập tên sách, tác giả, từ khóa..."
+                >
+                <button type="submit">Tìm kiếm</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- INTRO -->
+    <section class="intro-section">
+        <h2>Về LibraryHub</h2>
+        <p>
+            LibraryHub là nền tảng thư viện số hiện đại, cung cấp hàng nghìn đầu sách,
+            tài liệu học tập và nghiên cứu dành cho sinh viên, giảng viên và người yêu tri thức.
+        </p>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="categories-section">
+        <h2>Danh mục tài nguyên</h2>
+
+        <div class="categories-grid">
+            <div class="category-card">
+                <h3>📘 Sách học tập</h3>
+                <p>Giáo trình, sách tham khảo</p>
+            </div>
+
+            <div class="category-card">
+                <h3>📄 Tài liệu nghiên cứu</h3>
+                <p>Luận văn, bài báo khoa học</p>
+            </div>
+
+            <div class="category-card">
+                <h3>💻 Công nghệ</h3>
+                <p>Lập trình, AI, Data</p>
+            </div>
+
+            <div class="category-card">
+                <h3>🌍 Kỹ năng & xã hội</h3>
+                <p>Kỹ năng mềm, kinh tế</p>
             </div>
         </div>
+    </section>
 
-        <div class="slide">
-            <img src="/static/images/banner1.jpg" alt="Banner 3">
-            <div class="caption">
-                <h2>Thư viện số</h2>
-                <p>Hàng nghìn sách và tài liệu</p>
-            </div>
+    <!-- SÁCH MỚI -->
+    <section class="new-books-section">
+        <div class="section-header">
+            <h2>Sách mới</h2>
+            <a href="" class="view-all">Xem tất cả →</a>
         </div>
 
-        <div class="slide">
-            <img src="/static/images/banner2.jpg" alt="Banner 4">
-            <div class="caption">
-                <h2>Chia sẻ tri thức</h2>
-                <p>Kết nối cộng đồng học tập</p>
+        <div class="new-books-grid">
+            <div class="book-card">
+                <span class="badge new">NEW</span>
+                <img src="{% static 'images/book1.jpg' %}">
+                <h4>Lập trình Web với Django</h4>
+                <p class="author">Nguyễn Văn A</p>
+            </div>
+
+            <div class="book-card">
+                <span class="badge new">NEW</span>
+                <img src="{% static 'images/book2.jpg' %}">
+                <h4>SQL Server cơ bản</h4>
+                <p class="author">Trần Thị B</p>
+            </div>
+
+            <div class="book-card">
+                <span class="badge new">NEW</span>
+                <img src="{% static 'images/book3.jpg' %}">
+                <h4>Trí tuệ nhân tạo</h4>
+                <p class="author">Lê Văn C</p>
+            </div>
+
+            <div class="book-card">
+                <span class="badge new">NEW</span>
+                <img src="{% static 'images/book4.jpg' %}">
+                <h4>Kỹ năng học tập</h4>
+                <p class="author">Phạm Văn D</p>
             </div>
         </div>
+    </section>
 
-        <div class="slide">
-            <img src="/static/images/banner1.jpg" alt="Banner 5">
-            <div class="caption">
-                <h2>Khám phá ngay</h2>
-                <p>Bắt đầu hành trình học tập</p>
-            </div>
+    <!-- STATS -->
+    <section class="stats-section">
+        <div class="stat-box">
+            <h3>10,000+</h3>
+            <p>Đầu sách</p>
         </div>
-    </div>
+        <div class="stat-box">
+            <h3>5,000+</h3>
+            <p>Người dùng</p>
+        </div>
+        <div class="stat-box">
+            <h3>1,200+</h3>
+            <p>Tài liệu</p>
+        </div>
+        <div class="stat-box">
+            <h3>24/7</h3>
+            <p>Truy cập</p>
+        </div>
+    </section>
 
-    <!-- DOTS -->
-    <div class="dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div>
-</section>
-
-<section class="search-section">
-    <div class="search-box">
-        <form class="search-form" action="#" method="get">
-            <input 
-                type="text" 
-                name="q" 
-                placeholder="Nhập tên sách, tác giả, từ khóa..."
-                aria-label="Search"
-            >
-            <button type="submit">Tìm kiếm</button>
-        </form>
-    </div>
-</section>
-
-
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Bắt đầu khám phá tri thức ngay hôm nay</h2>
+        <p>Đăng ký để lưu sách yêu thích và tải tài liệu miễn phí</p>
+        <a href="" class="cta-button">Tham gia ngay</a>
+    </section>
 
 </main>
 
@@ -103,30 +209,30 @@
 
         <div class="footer-col about">
             <h4>LibraryHub</h4>
-            <p>Kết nối độc giả với kiến thức và thư viện kỹ thuật số hiện đại.</p>
+            <p>Thư viện số hiện đại cho cộng đồng học tập.</p>
         </div>
 
         <div class="footer-col links">
             <h4>Quick Links</h4>
             <ul>
-                <li><a href="home.html">Trang chủ</a></li>
-                <li><a href="resouces.html">Tài nguyên</a></li>
-                <li><a href="login_signup.html">Cá nhân</a></li>
+                <li><a href="{% url 'home' %}">Trang chủ</a></li>
+                <li><a href="">Tài nguyên</a></li>
+                <li><a href="">Cá nhân</a></li>
             </ul>
         </div>
 
         <div class="footer-col contact">
             <h4>Liên hệ</h4>
             <p>Email: info@libraryhub.example</p>
-            <p>Điện thoại: +84 123 456 789</p>
+            <p>Hotline: 0123 456 789</p>
         </div>
 
         <div class="footer-col visit-newsletter">
             <h4>Giờ mở cửa</h4>
-            <ul class="footer-hours">
-                <li>Thứ 2 - Thứ 6: 08:00 - 20:00</li>
+            <ul>
+                <li>Thứ 2 - 6: 08:00 - 20:00</li>
                 <li>Thứ 7: 09:00 - 17:00</li>
-                <li>Chủ nhật: Đóng cửa</li>
+                <li>CN: Đóng cửa</li>
             </ul>
         </div>
 
@@ -136,6 +242,8 @@
         <p>&copy; 2025 LibraryHub. All rights reserved.</p>
     </div>
 </footer>
-<script src="../static/js/banner.js"></script>
+
+<!-- JS -->
+<script src="{% static 'js/banner.js' %}"></script>
 </body>
 </html>
