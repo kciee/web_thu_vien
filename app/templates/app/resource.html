@@ -1,103 +1,87 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>LibraryHub - Resources</title>
-    <link rel="stylesheet" href="{% static 'css/resource.css' %}">
-    <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
-</head>
-<body>
 
-<header class="navbar">
-    <div class="logo">
-        <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
-        <span class="text">LibraryHub</span>
-    </div>
+{% block title %}Tài nguyên | LibraryHub{% endblock %}
+{% block css %}{% static 'css/resource.css' %}{% endblock %}
 
-    <nav>
-        <a href="{% url 'home' %}" class="active">Trang chủ</a>
-        <a href="{% url 'resource' %}">Tài nguyên</a>
-        <a href="{% url 'profile'%}">Cá nhân</a>
-    </nav>
-</header>
+{% block content %}
 
-<!-- BANNER -->
-<section class="resource-hero">
-    <h2>Tài nguyên học tập</h2>
-    <p>Tổng hợp sách, tài liệu, khóa học và nguồn học miễn phí</p>
+<section class="resource-header">
+    <h1>📚 Thư viện tài nguyên</h1>
+    <p>Khám phá kho sách và tài liệu học tập</p>
 </section>
 
-<!-- RESOURCE LIST -->
-<main class="resource-container">
+<section class="resource-filter">
+    <form class="filter-form">
+        <input type="text" placeholder="Tìm sách, tác giả...">
+        <select>
+            <option>Tất cả danh mục</option>
+            <option>Công nghệ</option>
+            <option>Học tập</option>
+            <option>Kỹ năng</option>
+        </select>
+        <button type="button">🔍 Tìm</button>
+    </form>
+</section>
 
-    <div class="resource-card">
-        <h3>📘 Ebook miễn phí</h3>
-        <p>Kho ebook học tập về lập trình, ngoại ngữ và kỹ năng mềm.</p>
-        <a href="#">Xem chi tiết</a>
-    </div>
+<section class="resource-list">
+    <div class="resource-grid">
 
-    <div class="resource-card">
-        <h3>🎥 Video học tập</h3>
-        <p>Các video hướng dẫn chất lượng cao từ cơ bản đến nâng cao.</p>
-        <a href="#">Xem chi tiết</a>
-    </div>
-
-    <div class="resource-card">
-        <h3>📝 Tài liệu PDF</h3>
-        <p>Tài liệu học tập, bài giảng và slide từ các giảng viên.</p>
-        <a href="#">Xem chi tiết</a>
-    </div>
-
-    <div class="resource-card">
-        <h3>🌐 Website hữu ích</h3>
-        <p>Danh sách website hỗ trợ học tập và nghiên cứu.</p>
-        <a href="#">Xem chi tiết</a>
-    </div>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-    <div class="footer-inner">
-
-        <div class="footer-col about">
-            <h4>LibraryHub</h4>
-            <p>Thư viện số hiện đại cho cộng đồng học tập.</p>
+        <div class="book-card" onclick="openPopup()">
+            <img src="{% static 'images/book2.jpg' %}">
+            <h3>SQL Server cơ bản</h3>
+            <p class="author">Nguyễn Văn A</p>
+            <div class="book-meta">
+                <span class="tag">Công nghệ</span>
+                <span class="status available">Có sẵn</span>
+            </div>
         </div>
 
-        <div class="footer-col links">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="{% url 'home' %}">Trang chủ</a></li>
-                <a href="{% url 'resource'%}">Tài nguyên</a>
-                <li><a href="{% url 'profile'%}">Cá nhân</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-col contact">
-            <h4>Liên hệ</h4>
-            <p>Email: info@libraryhub.example</p>
-            <p>Hotline: 0123 456 789</p>
-        </div>
-
-        <div class="footer-col visit-newsletter">
-            <h4>Giờ mở cửa</h4>
-            <ul>
-                <li>Thứ 2 - 6: 08:00 - 20:00</li>
-                <li>Thứ 7: 09:00 - 17:00</li>
-                <li>CN: Đóng cửa</li>
-            </ul>
+        <div class="book-card" onclick="openPopup()">
+            <img src="{% static 'images/book2.jpg' %}">
+            <h3>Lập trình Python</h3>
+            <p class="author">Trần Văn B</p>
+            <div class="book-meta">
+                <span class="tag">Học tập</span>
+                <span class="status borrowed">Đã mượn</span>
+            </div>
         </div>
 
     </div>
+</section>
 
-    <div class="footer-bottom">
-        <p>&copy; 2025 LibraryHub. All rights reserved.</p>
+<!-- POPUP CHI TIẾT SÁCH -->
+<div id="bookPopup" class="popup-overlay">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+
+        <div class="popup-body">
+            <div class="popup-image">
+                <img src="{% static 'images/book2.jpg' %}">
+            </div>
+
+            <div class="popup-info">
+                <h2>SQL Server cơ bản</h2>
+                <p class="author">Tác giả: Nguyễn Văn A</p>
+
+                <p class="description">
+                    Sách cung cấp kiến thức nền tảng về SQL Server,
+                    phù hợp cho sinh viên CNTT và người mới học cơ sở dữ liệu.
+                </p>
+
+                <div class="popup-meta">
+                    <span class="tag">Công nghệ</span>
+                    <span class="status available">Có sẵn</span>
+                </div>
+
+                <button class="borrow-btn">
+                    📖 Mượn sách
+                </button>
+            </div>
+        </div>
     </div>
-</footer>
-
-
-</body>
-</html>
+</div>
+{% endblock %}
+{% block javascript %}
+<script src="{% static 'js/resource.js' %}"></script>
+{% endblock %}
