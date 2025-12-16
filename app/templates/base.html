@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}LibraryHub{% endblock %}</title>
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% block css %}{% endblock %}">
+</head>
+<body>
+
+    {% include "component/header.html" %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "component/footer.html" %}
+
+    
+
+    {% block javascript %}{% endblock %}
+</body>
+</html>
+

@@ -39,28 +39,30 @@
     transition: color 0.3s ease;
 }
 
-.navbar nav a:hover {
-    color: #1abc9c;
+nav a {
+    position: relative;
+    padding: 8px 0;
+    color: #333;
+    text-decoration: none;
 }
 
-/* ACTIVE MENU */
-.navbar nav a.active {
-    color: #1abc9c;
-    font-weight: 600;
-}
-
-.navbar nav a::after {
+nav a::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: -6px;
+    bottom: -5px;
     width: 0;
     height: 2px;
-    background: #1abc9c;
+    background-color: #3498db;
     transition: width 0.3s ease;
 }
 
-.navbar nav a.active::after,
-.navbar nav a:hover::after {
+/* Hover */
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Active – TRANG HIỆN TẠI */
+nav a.active::after {
     width: 100%;
 }

@@ -1,0 +1,24 @@
+<header class="navbar">
+    <div class="logo">
+        <img src="../static/images/library-icon.png" alt="LibraryHub Logo" class="logo-image">
+        <span class="text">LibraryHub</span>
+    </div>
+
+    <nav>
+    <a href="{% url 'home' %}"
+       class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        Trang chủ
+    </a>
+
+    <a href="{% url 'resource' %}"
+       class="{% if request.resolver_match.url_name == 'resource' %}active{% endif %}">
+        Tài nguyên
+    </a>
+
+    <a href="{% url 'profile' %}"
+       class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+        Cá nhân
+    </a>
+</nav>
+
+</header>
