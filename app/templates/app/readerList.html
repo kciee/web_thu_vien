@@ -1,0 +1,43 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Danh sách Độc giả</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="/admin/app/reader/add/" class="btn btn-sm btn-primary">
+            <i class="bi bi-person-plus-fill"></i> Thêm độc giả
+        </a>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Mã thẻ</th>
+                        <th>Họ và tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Địa chỉ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reader in readers %}
+                    <tr>
+                        <td class="fw-bold">{{ reader.library_card_id }}</td>
+                        <td>{{ reader.fullname }}</td>
+                        <td>{{ reader.phone }}</td>
+                        <td>{{ reader.created_at|date:"d/m/Y" }}</td>
+                        <td>{{ reader.address|default:"-" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center">Chưa có độc giả nào.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
