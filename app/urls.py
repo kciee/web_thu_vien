@@ -8,5 +8,10 @@ urlpatterns = [
     path('resource/', views.resource, name='resource'),
     path('borrow-requests/', views.borrow_request_list, name='borrow_request_list'),
     path('borrow/create/', views.create_borrow, name='create_borrow'),
+    path('admin/', admin.site.urls),
+    path('', views.dashboard, name='dashboard'),
+    path('books/', views.bookList, name='bookList'),
+    path('readers/', views.readerList, name='readerList')
 
 ]
+
