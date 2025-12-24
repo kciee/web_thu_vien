@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh mục sách</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
+    <script src="{% static 'js/book_list.js' %}"></script>
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+
+<div class="layout">
+
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar">
+    <h2 class="logo">📚 Lib Mng</h2>
+    <ul>
+        <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>
+        <li><a href="{% url 'borrow_request_list' %}" class="active">Danh sách yêu cầu đã tạo</a></li>
+        <li><a href="#">Danh sách hình phạt</a></li>
+        <li><a href="#">Cài đặt</a></li>
+    </ul>
+</aside>
+
+<!-- ========== MAIN ========== -->
+<main class="main">
+        <h1 class="page-title">Danh mục sách</h1>
+
+        <div class="table-container">
+            <table class="request-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tiêu đề</th>
+                    <th>Giá</th>
+                    <th>NXB</th>
+                    <th>Tác giả</th>
+                    <th>Thể loại</th>
+                    <th>Mô tả</th>
+                    <th>Hành động</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book.book_id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.price }} đ</td>
+                    <td>{{ book.publisher.name }}</td>
+
+                    <td>
+                        {% for a in book.authors.all %}
+                            {{ a.name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+
+                    <td>
+                        {% for c in book.categories.all %}
+                            {{ c.category_name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+
+                    <td>{{ book.description|truncatechars:60 }}</td>
+
+    <td class="action-cell">
+        <i class="fa fa-ellipsis-v action-btn" onclick="toggleMenu('{{ book.book_id }}')"></i>
+    
+        <div class="action-menu" id="menu-{{ book.book_id }}">
+        <div class="menu-item" 
+             onclick="openDetail(this)"
+             data-title="{{ book.title|escapejs }}" 
+             data-description="{{ book.description|escapejs }}">
+            <i class="fa fa-eye"></i> Xem chi tiết
+        </div>
+        
+        <div class="menu-item" 
+             onclick="openBorrow('{{ book.book_id }}', '{{ book.title|escapejs }}')">
+            <i class="fa fa-book"></i> Mượn sách
+        </div>
+    </div>
+</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div class="modal" id="detailModal">
+    <div class="modal-content">
+        <h3>Xem chi tiết sách</h3>
+
+        <div class="form-group">
+            <label>Tiêu đề</label>
+            <input id="detailTitle" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Mô tả</label>
+            <textarea id="detailDesc" rows="4" readonly></textarea>
+        </div>
+
+        <button class="btn-secondary" onclick="closeDetail()">Đóng</button>
+    </div>
+</div>
+
+
+<div class="modal" id="borrowModal">
+    <div class="modal-content">
+        <h3>Mượn sách</h3>
+
+        <form method="post" action="{% url 'create_borrow' %}">
+            {% csrf_token %}
+            <input type="hidden" name="book_id" id="borrowBookId">
+
+            <div class="form-group">
+                <label>Ngày mượn</label>
+                <input type="date" name="borrow_date" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày trả</label>
+                <input type="date" name="return_date" required>
+            </div>
+
+            <button class="btn-primary" type="submit">Xác nhận</button>
+            <button type="button" class="btn-secondary" onclick="closeBorrow()">Hủy</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer">
+    <div class="footer-bottom">
+        © 2025 LibraryHub
+    </div>
+</footer>
+
+</body>
+</html>

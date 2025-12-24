@@ -1,31 +1,125 @@
 from django.db import models
-from django.utils import timezone
-from datetime import timedelta
 
+
+# ===== CATEGORY =====
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Tên thể loại")
-    
+    category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'CATEGORIES'
+
+    def __str__(self):
+        return self.category_name
+
+
+class Author(models.Model):
+    author_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'AUTHOR'
+
     def __str__(self):
         return self.name
 
+# ===== PUBLISHER =====
+class Publisher(models.Model):
+    publisher_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'PUBLISHER'
+
+
+# ===== BOOK =====
 class Book(models.Model):
-    title = models.CharField(max_length=200, verbose_name="Tên sách")
-    author = models.CharField(max_length=100, verbose_name="Tác giả")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Thể loại")
-    isbn = models.CharField(max_length=13, unique=True, verbose_name="Mã ISBN")
-    quantity = models.PositiveIntegerField(default=1, verbose_name="Số lượng tổng")
-    available_copies = models.PositiveIntegerField(default=1, verbose_name="Sẵn có")
-    
-    def __str__(self):
-        return self.title
-    
-class Reader(models.Model):
-    fullname = models.CharField(max_length=100, verbose_name="Họ và tên")
-    library_card_id = models.CharField(max_length=20, unique=True, verbose_name="Mã thẻ thư viện")
-    phone = models.CharField(max_length=15, verbose_name="Số điện thoại")
-    email = models.EmailField(verbose_name="Email", null=True, blank=True)
-    address = models.TextField(verbose_name="Địa chỉ", null=True, blank=True)
-    created_at = models.DateField(auto_now_add=True, verbose_name="Ngày làm thẻ")
+    book_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    price = models.IntegerField()
+    quantity = models.IntegerField(default=1)
+    image_url = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    publisher = models.ForeignKey(
+        Publisher,
+        db_column='publisher_id',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    authors = models.ManyToManyField(
+        Author,
+        through='BookAuthor'
+    )
+
+    categories = models.ManyToManyField(
+        Category,
+        through='BookCategory'
+    )
+
+    class Meta:
+        managed = False
+        db_table = 'BOOK'
+        
+class BookAuthor(models.Model):
+    book = models.ForeignKey(Book, db_column='book_id', on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, db_column='author_id', on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'BOOK_AUTHOR'
+        unique_together = ('book', 'author')
+        
+class BookCategory(models.Model):
+    book = models.ForeignKey(Book, db_column='book_id', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, db_column='category_id', on_delete=models.CASCADE)
+
+    class Meta:
+        managed = False
+        db_table = 'BOOK_CATEGORY'
+        unique_together = ('book', 'category')
+        
+
+
+class BorrowRecord(models.Model):
+    borrow_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(
+        'LibraryUser',
+        db_column='user_id',
+        on_delete=models.CASCADE
+    )
+    book = models.ForeignKey(
+        Book,
+        db_column='book_id',
+        on_delete=models.CASCADE
+    )
+    borrow_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField()
+    status = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'BORROW_RECORDS'
+
+class LibraryUser(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    created_at = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'USERS'
 
     def __str__(self):
-        return f"{self.fullname} ({self.library_card_id})"
+        return self.username
+
+
+
+

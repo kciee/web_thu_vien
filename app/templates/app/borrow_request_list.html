@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách yêu cầu đã tạo</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/borrow_request_list.css' %}">
+</head>
+
+<body>
+<div class="layout">
+
+<!-- ========== SIDEBAR ========== -->
+<aside class="sidebar">
+    <h2 class="logo">📚 Lib Mng</h2>
+    <ul>
+        <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>
+        <li><a href="{% url 'borrow_request_list' %}" class="active">Danh sách yêu cầu đã tạo</a></li>
+        <li><a href="#">Danh sách hình phạt</a></li>
+        <li><a href="#">Cài đặt</a></li>
+    </ul>
+</aside>
+
+<!-- ========== MAIN ========== -->
+<main class="main">
+    <h1 class="page-title">Danh sách yêu cầu đã tạo</h1>
+
+    <div class="table-container">
+        <table class="request-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tiêu đề</th>
+                    <th>Loại</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for r in borrow_requests %}
+                <tr>
+                    <td>{{ r.borrow_id }}</td>
+                    <td>{{ r.book.title }}</td>
+                    <td>{{ r.status }}</td>
+
+
+                    <td>
+                        {% if r.request_type == 'borrow' %}
+                            <span class="badge badge-blue">Yêu cầu mượn</span>
+                        {% else %}
+                            <span class="badge badge-yellow">Yêu cầu trả</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if r.status == 'pending' %}
+                            <span class="status status-pending">Đang chờ</span>
+                        {% elif r.status == 'approved' %}
+                            <span class="status status-approved">Được chấp nhận</span>
+                        {% else %}
+                            <span class="status status-rejected">Bị từ chối</span>
+                        {% endif %}
+                    </td>
+
+
+                    <td class="action-col">
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty">Chưa có yêu cầu nào</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</div>
+</body>
+</html>
