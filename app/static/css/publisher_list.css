@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.layout {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background: #0f2a44;
+    color: white;
+    height: 100vh;
+}
+
+.sidebar .logo {
+    padding: 20px;
+    font-size: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 12px 20px;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+    background: #1c4d7a;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+}
+
+/* CONTENT */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btnAdd {
+    background: #1c4d7a;
+    color: white;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background: #1c4d7a;
+    color: white;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

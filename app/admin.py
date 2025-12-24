@@ -1,15 +1,30 @@
 from django.contrib import admin
-from .models import Category, Book, Reader
+from .models import Book, Author, Category, Publisher
+
+
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('author_id', 'name')
+
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_id', 'category_name')
+
+
+
+@admin.register(Publisher)
+class PublisherAdmin(admin.ModelAdmin):
+    list_display = ('publisher_id', 'name')
+
+
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'quantity', 'available_copies') 
-    search_fields = ('title', 'author', 'isbn') 
-    list_filter = ('category',) 
-
-@admin.register(Reader)
-class ReaderAdmin(admin.ModelAdmin):
-    list_display = ('library_card_id', 'fullname', 'phone', 'created_at') 
-    search_fields = ('fullname', 'library_card_id', 'phone')
-
-admin.site.register(Category)
+    list_display = (
+        'title',
+        'price',
+        'quantity',
+        'publisher',
+    )

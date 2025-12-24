@@ -1,0 +1,66 @@
+ * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", sans-serif; }
+        body { background: #f4f6fb; color: #1f2937; }
+        .layout { display: flex; min-height: 100vh; }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #0f172a, #020617);
+            color: #fff;
+            padding: 20px;
+        }
+        .logo { font-size: 22px; font-weight: 600; margin-bottom: 30px; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: 8px; }
+        .sidebar a {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; border-radius: 10px;
+            color: #cbd5f5; text-decoration: none; transition: 0.3s;
+        }
+        .sidebar a:hover, .sidebar li.active a { background: #1e293b; color: #fff; }
+
+        /* CONTENT */
+        .content { flex: 1; padding: 24px 30px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .topbar h1 { font-size: 22px; font-weight: 600; }
+
+        /* STAT CARDS */
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 26px; }
+        .card {
+            background: #fff; border-radius: 14px; padding: 18px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10Fx 20px rgba(0,0,0,0.05);
+        }
+        .card h3 { font-size: 14px; color: #64748b; margin-bottom: 6px; }
+        .card .value { font-size: 26px; font-weight: 700; }
+        .icon {
+            width: 42px; height: 42px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 18px;
+        }
+        .blue { background: #3b82f6; }
+        .green { background: #22c55e; }
+        .orange { background: #f97316; }
+        .purple { background: #a855f7; }
+        .red { background: #ef4444; }
+        .cyan { background: #06b6d4; }
+
+        /* LOAN SECTION */
+        .section-title { font-size: 18px; font-weight: 600; margin: 20px 0 14px; }
+        .loan-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .loan-card {
+            background: #fff; padding: 16px; border-radius: 14px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .loan-card h4 { font-size: 14px; color: #64748b; margin-bottom: 6px; }
+        .loan-card .number { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .loan-card span { font-size: 12px; color: #16a34a; }
+
+        @media (max-width: 1000px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .loan-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+            .sidebar { display: none; }
+            .stats, .loan-stats { grid-template-columns: 1fr; }
+        }
