@@ -10,6 +10,8 @@ body {
     background: #f4f6f9;
     color: #1f2933;
 }
+
+/* ================= LOGO ================= */
 .logo {
     display: flex;
     align-items: center;
@@ -20,6 +22,7 @@ body {
     width: 40px;
     height: 40px;
 }
+
 /* ================= LAYOUT ================= */
 .layout {
     display: flex;
@@ -83,27 +86,46 @@ body {
     overflow-x: auto;
 }
 
-.request-table {
+.fine-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 900px;
 }
 
-.request-table thead {
+.fine-table thead {
     background: #2563eb;
     color: #fff;
 }
 
-.request-table th,
-.request-table td {
+.fine-table th,
+.fine-table td {
     padding: 12px 14px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
     vertical-align: middle;
 }
 
-.request-table tbody tr:hover {
+.fine-table tbody tr:hover {
     background: #f1f5f9;
+}
+
+/* ================= STATUS BADGE ================= */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.badge.paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge.unpaid {
+    background: #fee2e2;
+    color: #991b1b;
 }
 
 /* ================= ACTION MENU ================= */

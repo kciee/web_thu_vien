@@ -18,11 +18,13 @@
 
 <!-- ========== SIDEBAR ========== -->
 <aside class="sidebar">
-    <h2 class="logo">📚 Lib Mng</h2>
+ <div class="logo">
+        <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
+    </div>
     <ul>
-        <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>
-        <li><a href="{% url 'borrow_request_list' %}" class="active">Danh sách yêu cầu đã tạo</a></li>
-        <li><a href="#">Danh sách hình phạt</a></li>
+        <li><a href="{% url 'book_list' %}" class="active">Danh mục sách</a></li>
+        <li><a href="{% url 'borrow_request_list' %}">Danh sách yêu cầu đã tạo</a></li>
+        <li><a href="{% url 'fine_list' %}">Danh sách hình phạt</a></li>
         <li><a href="#">Cài đặt</a></li>
     </ul>
 </aside>
