@@ -13,6 +13,11 @@ def create_borrow(request):
 def home(request):
     return render(request, 'app/home.html')
 # Create your views here.
+def login(request):
+    return render(request, 'app/login.html')
+
+def register(request):
+    return render(request, 'app/register.html')
 
 
 def book_list(request):
