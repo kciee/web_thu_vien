@@ -5,11 +5,16 @@
         menu.style.display = 'block';
     }
 
-    function openDetail(title, desc) {
-        document.getElementById('detailTitle').value = title;
-        document.getElementById('detailDesc').value = desc;
-        document.getElementById('detailModal').style.display = 'flex';
-    }
+    function openDetail(el) {
+    const title = el.dataset.title;
+    const description = el.dataset.description;
+
+    document.getElementById("detailTitle").value = title;
+    document.getElementById("detailDesc").value = description;
+
+    document.getElementById("detailModal").style.display = "flex";
+}
+
 
     function closeDetail() {
         document.getElementById('detailModal').style.display = 'none';

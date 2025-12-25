@@ -1,7 +1,7 @@
 from django.db import models
 
 
-# ===== CATEGORY =====
+
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-# ===== PUBLISHER =====
+
 class Publisher(models.Model):
     publisher_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -35,7 +35,7 @@ class Publisher(models.Model):
         db_table = 'PUBLISHER'
 
 
-# ===== BOOK =====
+
 class Book(models.Model):
     book_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
@@ -120,6 +120,18 @@ class LibraryUser(models.Model):
     def __str__(self):
         return self.username
 
+class BorrowHistory(models.Model):
+    history_id = models.AutoField(primary_key=True)
+    borrow = models.ForeignKey(
+        BorrowRecord,
+        on_delete=models.CASCADE,
+        db_column='borrow_id'
+    )
+    returned_at = models.DateField()
+    days_late = models.IntegerField()
+    fine = models.IntegerField()
 
+    class Meta:
+        db_table = 'BORROW_HISTORY'
 
 
