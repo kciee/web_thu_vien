@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'webthuvien1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'QLTV',   # tên DB bạn đã tạo trong SQL Server
-        'HOST': 'ADMIN-PC\\SQLEXPRESS',
+        'NAME': 'QLTV',   
+        'HOST': 'DESKTOP-CO3QL0K',
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
+            'driver': 'ODBC Driver 18 for SQL Server',
             'trusted_connection': 'yes',
         },
     }
