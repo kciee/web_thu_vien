@@ -34,3 +34,22 @@
             e.target.style.display = 'none';
         }
     }
+    function openReview(bookId, title) {
+    document.getElementById('reviewModal').style.display = 'flex';
+    document.getElementById('reviewBookTitle').innerText = 'Đánh giá: ' + title;
+    document.getElementById('reviewBookId').value = bookId;
+
+    // Ẩn tất cả review
+    document.querySelectorAll('.reviews').forEach(r => r.style.display = 'none');
+
+    // Hiện review đúng sách
+    const reviewBox = document.getElementById('reviews-' + bookId);
+    if (reviewBox) reviewBox.style.display = 'block';
+
+    // Set action form
+    document.getElementById('reviewForm').action = `/books/${bookId}/review/`;
+}
+
+function closeReview() {
+    document.getElementById('reviewModal').style.display = 'none';
+}

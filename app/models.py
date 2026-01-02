@@ -134,4 +134,27 @@ class BorrowHistory(models.Model):
     class Meta:
         db_table = 'BORROW_HISTORY'
 
+class Review(models.Model):
+    review_id = models.AutoField(primary_key=True)
 
+    user = models.ForeignKey(
+        LibraryUser,
+        on_delete=models.CASCADE,
+        db_column='user_id'
+    )
+
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        db_column='book_id',
+        related_name='reviews'
+    )
+
+    rating = models.IntegerField()
+    comment = models.TextField()
+    sentiment = models.CharField(max_length=20, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'REVIEWS'

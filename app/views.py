@@ -4,6 +4,9 @@ from .models import Book, Category, LibraryUser
 from django.shortcuts import redirect
 from .models import BorrowRecord
 from .models import BorrowHistory
+from .models import Review
+from .ai.sentiment import analyze_sentiment
+from  django.shortcuts import get_object_or_404
 
 def create_borrow(request):
     if request.method == 'POST':
@@ -46,7 +49,7 @@ def dashboard(request):
     total_users = LibraryUser.objects.count()
     total_categories = Category.objects.count()
     
-    recent_books = Book.objects.order_by('-id')[:5]
+    recent_books = Book.objects.order_by('-book_id')[:5]
 
     context = {
         'total_books': total_books,
@@ -57,7 +60,7 @@ def dashboard(request):
     return render(request, 'app/dashboard.html', context)
 
 def bookList(request):
-    books = Book.objects.all().order_by('-id') 
+    books = Book.objects.all().order_by('-book_id') 
     return render(request, 'app/bookList.html', {'books': books})
 
 def readerList(request):
@@ -72,4 +75,24 @@ def fine_list(request):
     return render(request, 'app/fine_list.html', {
         'fines': fines
     })
+
+def add_review(request, book_id):
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        rating = int(request.POST.get('rating'))
+
+        book = get_object_or_404(Book, book_id=book_id)
+        user = LibraryUser.objects.first()  # tạm thời
+
+        sentiment = analyze_sentiment(comment)
+
+        Review.objects.create(
+            user=user,
+            book=book,
+            rating=rating,
+            comment=comment,
+            sentiment=sentiment
+        )
+
+        return redirect('book_list')
 
