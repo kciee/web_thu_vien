@@ -9,12 +9,13 @@ urlpatterns = [
     path('borrow-requests/', views.borrow_request_list, name='borrow_request_list'),
     path('borrow/create/', views.create_borrow, name='create_borrow'),
     path('admin/', admin.site.urls),
-    path('', views.dashboard, name='dashboard'),
-    path('books/', views.bookList, name='bookList'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('books_manage/', views.bookList, name='bookList'),
     path('readers/', views.readerList, name='readerList'),
     path('fines/', views.fine_list, name='fine_list'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
-
+    path('profile/', views.home, name='profile'),
+    path('add_book/', views.add_book, name='add_book')
 ]
 

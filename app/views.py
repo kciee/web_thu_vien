@@ -46,7 +46,7 @@ def dashboard(request):
     total_users = LibraryUser.objects.count()
     total_categories = Category.objects.count()
     
-    recent_books = Book.objects.order_by('-id')[:5]
+    recent_books = Book.objects.order_by('-book_id')[:5]
 
     context = {
         'total_books': total_books,
@@ -57,12 +57,12 @@ def dashboard(request):
     return render(request, 'app/dashboard.html', context)
 
 def bookList(request):
-    books = Book.objects.all().order_by('-id') 
+    books = Book.objects.all().order_by('-book_id') 
     return render(request, 'app/bookList.html', {'books': books})
 
 def readerList(request):
     readers = LibraryUser.objects.all().order_by('-created_at')
-    return render(request, 'app/readerList.html', {'readers': users})
+    return render(request, 'app/readerList.html', {'readers': readers})
 
 def fine_list(request):
     fines = BorrowHistory.objects.select_related(
@@ -72,4 +72,30 @@ def fine_list(request):
     return render(request, 'app/fine_list.html', {
         'fines': fines
     })
+def add_book(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        category_id = request.POST.get('category')
+        publisher = request.POST.get('publisher')
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        
+        image = request.FILES.get('image')
 
+        try:
+            category = Category.objects.get(pk=category_id)
+        except Category.DoesNotExist:
+            category = None
+
+        Book.objects.create(
+            title=title,
+            price=price,
+            quantity=quantity,
+            image_url=image 
+        )
+
+        return redirect('bookList') 
+    
+    categories = Category.objects.all()
+    return render(request, 'app/add_book.html')
