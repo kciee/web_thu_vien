@@ -80,13 +80,11 @@ WSGI_APPLICATION = 'webthuvien1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'QLTV',
-        'USER': '',
-        'PASSWORD': '',   
-        'HOST': 'localhost',
+        'NAME': 'QLTV',   
+        'HOST': 'ADMIN-PC\SQLEXPRESS',
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
-            'extra_params': 'TrustServerCertificate=yes;Trusted_Connection=yes'
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
         },
     }
 }

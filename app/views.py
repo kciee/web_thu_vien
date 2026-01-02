@@ -4,6 +4,9 @@ from .models import Book, Category, LibraryUser
 from django.shortcuts import redirect
 from .models import BorrowRecord
 from .models import BorrowHistory
+from .models import Review
+from .ai.sentiment import analyze_sentiment
+from  django.shortcuts import get_object_or_404
 
 def create_borrow(request):
     if request.method == 'POST':
@@ -83,6 +86,7 @@ def add_book(request):
         
         image = request.FILES.get('image')
 
+<<<<<<< HEAD
         try:
             category = Category.objects.get(pk=category_id)
         except Category.DoesNotExist:
@@ -99,3 +103,25 @@ def add_book(request):
     
     categories = Category.objects.all()
     return render(request, 'app/add_book.html')
+=======
+def add_review(request, book_id):
+    if request.method == 'POST':
+        comment = request.POST.get('comment')
+        rating = int(request.POST.get('rating'))
+
+        book = get_object_or_404(Book, book_id=book_id)
+        user = LibraryUser.objects.first()  # tạm thời
+
+        sentiment = analyze_sentiment(comment)
+
+        Review.objects.create(
+            user=user,
+            book=book,
+            rating=rating,
+            comment=comment,
+            sentiment=sentiment
+        )
+
+        return redirect('book_list')
+
+>>>>>>> 453804d9ca8fcd9dfdd7ee8d22b17187d30ed355

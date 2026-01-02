@@ -12,11 +12,9 @@
 
 <body>
 
-<!-- ========== HEADER ========== -->
 
 <div class="layout">
 
-<!-- ========== SIDEBAR ========== -->
 <aside class="sidebar">
  <div class="logo">
         <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
@@ -74,18 +72,25 @@
         <i class="fa fa-ellipsis-v action-btn" onclick="toggleMenu('{{ book.book_id }}')"></i>
     
         <div class="action-menu" id="menu-{{ book.book_id }}">
-        <div class="menu-item" 
+            <div class="menu-item" 
              onclick="openDetail(this)"
              data-title="{{ book.title|escapejs }}" 
              data-description="{{ book.description|escapejs }}">
             <i class="fa fa-eye"></i> Xem chi tiết
-        </div>
+            </div>
         
-        <div class="menu-item" 
-             onclick="openBorrow('{{ book.book_id }}', '{{ book.title|escapejs }}')">
-            <i class="fa fa-book"></i> Mượn sách
+            <div class="menu-item" 
+                onclick="openBorrow('{{ book.book_id }}', '{{ book.title|escapejs }}')">
+                <i class="fa fa-book"></i> Mượn sách
+            </div>
+
+            <div class="menu-item"
+            onclick="openReview('{{ book.book_id }}', '{{ book.title|escapejs }}')">
+            <i class="fa fa-star"></i> Đánh giá sách
+            </div>
+
+
         </div>
-    </div>
 </td>
                 </tr>
                 {% endfor %}
@@ -137,6 +142,63 @@
         </form>
     </div>
 </div>
+
+<div class="modal" id="reviewModal">
+    <div class="modal-content">
+        <h3 id="reviewBookTitle">Đánh giá sách</h3>
+
+        <!-- HIỂN THỊ REVIEW -->
+        <div class="review-list">
+            {% for book in books %}
+            <div id="reviews-{{ book.book_id }}" class="reviews" style="display:none">
+                {% for r in book.reviews.all %}
+                    <div class="review-item">
+                        <p>{{ r.comment }}</p>
+
+                        {% if r.sentiment == 'positive' %}
+                            <span class="badge bg-success">Tích cực</span>
+                        {% elif r.sentiment == 'negative' %}
+                            <span class="badge bg-danger">Tiêu cực</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Trung lập</span>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p>Chưa có đánh giá</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- FORM REVIEW -->
+        <form method="post" id="reviewForm" >
+            {% csrf_token %}
+
+            <input type="hidden" name="book_id" id="reviewBookId">
+
+            <div class="form-group">
+                <label>Đánh giá</label>
+                <select name="rating" required>
+                    <option value="5">5 ⭐</option>
+                    <option value="4">4 ⭐</option>
+                    <option value="3">3 ⭐</option>
+                    <option value="2">2 ⭐</option>
+                    <option value="1">1 ⭐</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Bình luận</label>
+                <textarea name="comment" required></textarea>
+            </div>
+
+            <button class="btn-primary" type="submit">Gửi đánh giá</button>
+            <button type="button" class="btn-secondary" onclick="closeReview()">Đóng</button>
+        </form>
+    </div>
+</div>
+
+
 
 
 <!-- ========== FOOTER ========== -->
