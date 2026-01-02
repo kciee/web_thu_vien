@@ -81,9 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'QLTV',   
-        'HOST': 'DESKTOP-CO3QL0K',
+        'HOST': 'ADMIN-PC\SQLEXPRESS',
         'OPTIONS': {
-            'driver': 'ODBC Driver 18 for SQL Server',
+            'driver': 'ODBC Driver 17 for SQL Server',
             'trusted_connection': 'yes',
         },
     }
