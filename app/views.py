@@ -65,7 +65,7 @@ def bookList(request):
 
 def readerList(request):
     readers = LibraryUser.objects.all().order_by('-created_at')
-    return render(request, 'app/readerList.html', {'readers': users})
+    return render(request, 'app/readerList.html', {'readers': readers})
 
 def fine_list(request):
     fines = BorrowHistory.objects.select_related(
@@ -75,7 +75,35 @@ def fine_list(request):
     return render(request, 'app/fine_list.html', {
         'fines': fines
     })
+def add_book(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        category_id = request.POST.get('category')
+        publisher = request.POST.get('publisher')
+        price = request.POST.get('price')
+        quantity = request.POST.get('quantity')
+        
+        image = request.FILES.get('image')
 
+<<<<<<< HEAD
+        try:
+            category = Category.objects.get(pk=category_id)
+        except Category.DoesNotExist:
+            category = None
+
+        Book.objects.create(
+            title=title,
+            price=price,
+            quantity=quantity,
+            image_url=image 
+        )
+
+        return redirect('bookList') 
+    
+    categories = Category.objects.all()
+    return render(request, 'app/add_book.html')
+=======
 def add_review(request, book_id):
     if request.method == 'POST':
         comment = request.POST.get('comment')
@@ -96,3 +124,4 @@ def add_review(request, book_id):
 
         return redirect('book_list')
 
+>>>>>>> 453804d9ca8fcd9dfdd7ee8d22b17187d30ed355
