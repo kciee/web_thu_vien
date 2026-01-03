@@ -112,7 +112,7 @@ def add_review(request, book_id):
         book = get_object_or_404(Book, book_id=book_id)
         user = LibraryUser.objects.first()  # tạm thời
 
-        sentiment = analyze_sentiment(comment)
+        sentiment = analyze_sentiment(comment, rating)
 
         Review.objects.create(
             user=user,
