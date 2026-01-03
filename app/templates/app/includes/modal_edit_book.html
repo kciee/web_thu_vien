@@ -1,0 +1,80 @@
+<div class="modal fade" id="editBookModal_{{ book.book_id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title fs-6">Sửa sách: {{ book.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            
+            <form action="{% url 'edit_book' book.book_id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body text-start">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold small">Tên sách</label>
+                            <input type="text" name="title" class="form-control form-control-sm" value="{{ book.title }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Tác giả</label>
+                            <select name="author" class="form-select form-select-sm">
+                                {% for author in authors %}
+                                    <option value="{{ author.author_id }}" 
+                                        {% if book.authors.first.author_id == author.author_id %}selected{% endif %}>
+                                        {{ author.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Thể loại</label>
+                            <select name="category" class="form-select form-select-sm">
+                                {% for cat in categories %}
+                                    <option value="{{ cat.category_id }}"
+                                        {% if book.categories.first.category_id == cat.category_id %}selected{% endif %}>
+                                        {{ cat.category_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small">Nhà xuất bản</label>
+                            <select name="publisher" class="form-select form-select-sm">
+                                {% for pub in publishers %}
+                                    <option value="{{ pub.publisher_id }}"
+                                        {% if book.publisher_id == pub.publisher_id %}selected{% endif %}>
+                                        {{ pub.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small">Giá tiền</label>
+                            <input type="number" name="price" class="form-control form-control-sm" value="{{ book.price }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small">Số lượng</label>
+                            <input type="number" name="quantity" class="form-control form-control-sm" value="{{ book.quantity }}">
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold small">Ảnh bìa</label>
+                            <input type="file" name="image" class="form-control form-control-sm">
+                            {% if book.image_url %}
+                                <div class="mt-1 small text-muted">Hiện có ảnh: {{ book.image_url }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer py-1 bg-light">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-sm btn-warning px-4">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

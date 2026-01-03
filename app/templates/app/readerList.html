@@ -3,41 +3,87 @@
 {% block content %}
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Danh sách Độc giả</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="/admin/app/reader/add/" class="btn btn-sm btn-primary">
-            <i class="bi bi-person-plus-fill"></i> Thêm độc giả
-        </a>
-    </div>
+    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addReaderModal">
+        <i class="bi bi-person-plus-fill"></i> Thêm độc giả
+    </button>
 </div>
 
 <div class="card shadow-sm">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover table-striped align-middle">
+            <table class="table table-hover table-bordered align-middle">
                 <thead class="table-dark">
                     <tr>
-                        <th>Mã thẻ</th>
+                        <th class="text-center">ID</th>
+                        <th>Tên truy cập</th>
                         <th>Họ và tên</th>
-                        <th>Số điện thoại</th>
-                        <th>Ngày đăng ký</th>
-                        <th>Địa chỉ</th>
+                        <th>Email</th>
+                        <th class="text-center">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for reader in readers %}
                     <tr>
-                        <td class="fw-bold">{{ reader.library_card_id }}</td>
-                        <td>{{ reader.fullname }}</td>
-                        <td>{{ reader.phone }}</td>
-                        <td>{{ reader.created_at|date:"d/m/Y" }}</td>
-                        <td>{{ reader.address|default:"-" }}</td>
+                        <td class="text-center">{{ reader.user_id }}</td>
+                        
+                        <td class="fw-bold text-primary">{{ reader.username }}</td>
+                        
+                        <td>{{ reader.full_name }}</td>
+                        
+                        <td>{{ reader.email }}</td>
+                        
+                        <td class="text-center">
+                            <a href="{% url 'delete_reader' reader.user_id %}" 
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('CẢNH BÁO: Xóa độc giả {{ reader.username }} sẽ xóa toàn bộ lịch sử mượn trả của họ. Bạn có chắc chắn?');">
+                                <i class="bi bi-trash"></i> Xóa
+                            </a>
+                        </td>
                     </tr>
                     {% empty %}
-                    <tr><td colspan="5" class="text-center">Chưa có độc giả nào.</td></tr>
+                    <tr><td colspan="5" class="text-center text-muted py-3">Chưa có độc giả nào.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="addReaderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Thêm Độc Giả Mới</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'add_reader' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Tên đăng nhập (Username)</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Mật khẩu mặc định</label>
+                        <input type="text" name="password" class="form-control" value="123456" required>
+                        <div class="form-text text-muted">Mật khẩu mặc định là 123456.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Họ và tên</label>
+                        <input type="text" name="full_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small">Email</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Tạo tài khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -8,24 +8,32 @@ urlpatterns = [
     path('resource/', views.resource, name='resource'),
     path('borrow-requests/', views.borrow_request_list, name='borrow_request_list'),
     path('borrow/create/', views.create_borrow, name='create_borrow'),
-<<<<<<< HEAD
     path('admin/', admin.site.urls),
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('books_manage/', views.bookList, name='bookList'),
-=======
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('books_admin/', views.bookList, name='bookList'),
->>>>>>> 453804d9ca8fcd9dfdd7ee8d22b17187d30ed355
-    path('readers/', views.readerList, name='readerList'),
     path('fines/', views.fine_list, name='fine_list'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
-<<<<<<< HEAD
     path('profile/', views.home, name='profile'),
-    path('add_book/', views.add_book, name='add_book')
-=======
+    path('add_book/', views.add_book, name='add_book'),
     path('books/<int:book_id>/review/', views.add_review, name='add_review'),
-
->>>>>>> 453804d9ca8fcd9dfdd7ee8d22b17187d30ed355
+    #admin
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('books_manage/', views.bookList, name='bookList'),
+    path('readers/', views.readerList, name='readerList'),
+    path('add_reader/', views.add_reader, name='add_reader'),
+    path('delete_reader/<int:user_id>/', views.delete_reader, name='delete_reader'),
+    path('categories/', views.category_list, name='category_list'),
+    path('add_category/', views.add_category, name='add_category'),
+    path('delete_category/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('edit_category/<int:category_id>/', views.edit_category, name='edit_category'),
+    path('authors/', views.author_list, name='author_list'),
+    path('add_author/', views.add_author, name='add_author'),
+    path('delete_author/<int:author_id>/', views.delete_author, name='delete_author'),
+    path('edit_author/<int:author_id>/', views.edit_author, name='edit_author'),
+    path('publishers/', views.publisher_list, name='publisher_list'),
+    path('add_publisher/', views.add_publisher, name='add_publisher'),
+    path('delete_publisher/<int:publisher_id>/', views.delete_publisher, name='delete_publisher'),
+    path('edit_publisher/<int:publisher_id>/', views.edit_publisher, name='edit_publisher'),
+    path('delete_book/<int:book_id>/', views.delete_book, name='delete_book'),
+    path('edit_book/<int:book_id>/', views.edit_book, name='edit_book'),
 ]
 
