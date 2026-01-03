@@ -7,7 +7,7 @@ class Category(models.Model):
     category_name = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'CATEGORIES'
 
     def __str__(self):
@@ -19,7 +19,7 @@ class Author(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'AUTHOR'
 
     def __str__(self):
@@ -31,7 +31,7 @@ class Publisher(models.Model):
     name = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'PUBLISHER'
 
 
@@ -62,7 +62,7 @@ class Book(models.Model):
     )
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'BOOK'
         
 class BookAuthor(models.Model):
@@ -70,7 +70,7 @@ class BookAuthor(models.Model):
     author = models.ForeignKey(Author, db_column='author_id', on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'BOOK_AUTHOR'
         unique_together = ('book', 'author')
         
@@ -79,7 +79,7 @@ class BookCategory(models.Model):
     category = models.ForeignKey(Category, db_column='category_id', on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'BOOK_CATEGORY'
         unique_together = ('book', 'category')
         
@@ -102,7 +102,7 @@ class BorrowRecord(models.Model):
     status = models.CharField(max_length=20)
     notified = models.BooleanField(default=False) 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'BORROW_RECORDS'
 
 class LibraryUser(models.Model):
@@ -114,7 +114,7 @@ class LibraryUser(models.Model):
     created_at = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'USERS'
 
     def __str__(self):
