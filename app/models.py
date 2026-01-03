@@ -100,7 +100,7 @@ class BorrowRecord(models.Model):
     borrow_date = models.DateField(null=True, blank=True)
     due_date = models.DateField()
     status = models.CharField(max_length=20)
-
+    notified = models.BooleanField(default=False) 
     class Meta:
         managed = False
         db_table = 'BORROW_RECORDS'
@@ -158,3 +158,18 @@ class Review(models.Model):
     class Meta:
         managed = False
         db_table = 'REVIEWS'
+
+class Notification(models.Model):
+    notification_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(
+        LibraryUser,
+        on_delete=models.CASCADE,
+        db_column='user_id'
+    )
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'NOTIFICATIONS'
