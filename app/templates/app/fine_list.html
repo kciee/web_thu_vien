@@ -16,7 +16,11 @@
     <!-- ========== SIDEBAR ========== -->
     <aside class="sidebar">
         <div class="logo">
-            <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/library-icon.png' %}" 
+                     alt="LibraryHub Logo" 
+                     class="logo-image">
+            </a>
         </div>
         <ul>
             <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>

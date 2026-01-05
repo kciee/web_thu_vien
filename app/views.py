@@ -7,7 +7,7 @@ from .models import BorrowHistory
 from .models import Review
 from .ai.sentiment import analyze_sentiment
 from django.utils import timezone
-from django.contrib.admin.views.decorators import staff_member_required
+from .decorators import admin_required
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
 from django.contrib import messages
@@ -28,7 +28,7 @@ def calculate_fine(due_date, return_date=None):
 
 from django.utils import timezone
 
-@staff_member_required
+@admin_required
 def approve_payment(request, payment_id):
     payment = get_object_or_404(PaymentRequest, payment_id=payment_id)
 
@@ -46,7 +46,7 @@ def approve_payment(request, payment_id):
     return redirect('admin_payment_list')
 
 
-@staff_member_required
+@admin_required
 def admin_payment_list(request):
     payments = PaymentRequest.objects.select_related(
         'history__borrow__book',
@@ -95,7 +95,7 @@ def create_borrow(request):
 
         return redirect('borrow_request_list')
 
-@staff_member_required
+@admin_required
 def admin_borrow_manage(request):
     borrows = BorrowRecord.objects.select_related(
         'user', 'book'
@@ -105,7 +105,7 @@ def admin_borrow_manage(request):
         'borrows': borrows
     })
     
-@staff_member_required
+@admin_required
 def admin_approve_borrow(request, borrow_id):
     borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
 
@@ -121,7 +121,7 @@ def admin_approve_borrow(request, borrow_id):
 from datetime import date
 from .models import BorrowHistory
 
-@staff_member_required
+@admin_required
 def admin_approve_return(request, borrow_id):
     borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
 
