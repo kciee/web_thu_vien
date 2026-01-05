@@ -1,0 +1,88 @@
+/* ===== ADMIN PAYMENT MANAGEMENT ===== */
+
+h1.h2 {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Card */
+.card {
+    border-radius: 12px;
+    border: none;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Table */
+.table {
+    font-size: 0.95rem;
+}
+
+.table thead th {
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+/* Hover row */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Book title */
+.table tbody td.text-primary {
+    font-weight: 600;
+}
+
+/* Fine amount */
+.table tbody td.text-danger {
+    font-weight: 700;
+}
+
+/* Badge */
+.badge {
+    padding: 0.45em 0.75em;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+}
+
+/* Action buttons */
+.table .btn {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.table .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.table .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Empty state */
+.table td.text-muted {
+    font-style: italic;
+}
+
+/* Responsive fix */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.85rem;
+    }
+
+    h1.h2 {
+        font-size: 1.25rem;
+    }
+}

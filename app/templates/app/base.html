@@ -39,12 +39,14 @@
         
         <nav class="col-md-2 d-none d-md-block sidebar">
             <div class="sidebar-sticky">
-                <div class="text-center text-white mb-4">
-                    <img src="{% static 'images/library-icon.png' %}" 
-                        alt="LibraryHub Logo" 
-                        class="img-fluid" 
-                        style="max-width: 120px; height: auto;">
-                    <h5 class="mt-2">Library Admin</h5>
+                 <div class="text-center text-white mb-4">
+                    <a href="{% url 'home' %}" class="logo-link">
+                        <img src="{% static 'images/library-icon.png' %}"
+                             alt="LibraryHub Logo"
+                             class="img-fluid"
+                             style="max-width: 120px; height: auto;">
+                        <h5 class="mt-2">Library Admin</h5>
+                    </a>
                 </div>
                 
                 <li class="nav-item">
@@ -65,11 +67,16 @@
                         <i class="bi bi-people"></i> Quản lý Độc giả
                     </a>
                 </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_payment_list' %}">
+                            <i class="bi bi-arrow-left-right"></i> Thanh toán hình phạt
+                        </a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_borrow_manage' %}">
                             <i class="bi bi-arrow-left-right"></i> Mượn / Trả
                         </a>
-                    </li>
+                </li>
                 </ul>
 
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-white text-uppercase" style="font-size: 0.75rem; color:white">

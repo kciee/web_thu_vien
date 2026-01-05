@@ -1,26 +1,14 @@
-/* ================= RESET & BASE ================= */
+/* ================= RESET ================= */
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: #f4f6f9;
     color: #1f2933;
-}
-
-/* ================= LOGO ================= */
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo-image {
-    width: 40px;
-    height: 40px;
 }
 
 /* ================= LAYOUT ================= */
@@ -38,9 +26,14 @@ body {
 }
 
 .sidebar .logo {
-    font-size: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 30px;
+}
+
+.logo-image {
+    width: 42px;
+    height: 42px;
 }
 
 .sidebar ul {
@@ -57,7 +50,7 @@ body {
     border-radius: 6px;
     color: #e5e7eb;
     text-decoration: none;
-    transition: 0.3s;
+    transition: 0.25s;
 }
 
 .sidebar ul li a:hover,
@@ -74,8 +67,8 @@ body {
 
 .page-title {
     font-size: 24px;
-    margin-bottom: 20px;
     font-weight: 600;
+    margin-bottom: 20px;
 }
 
 /* ================= TABLE ================= */
@@ -86,46 +79,52 @@ body {
     overflow-x: auto;
 }
 
-.fine-table {
+.request-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 900px;
 }
 
-.fine-table thead {
+.request-table thead {
     background: #2563eb;
     color: #fff;
 }
 
-.fine-table th,
-.fine-table td {
+.request-table th,
+.request-table td {
     padding: 12px 14px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
     vertical-align: middle;
 }
 
-.fine-table tbody tr:hover {
+.request-table tbody tr:hover {
     background: #f1f5f9;
 }
 
-/* ================= STATUS BADGE ================= */
-.badge {
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+}
+
+/* ================= STATUS ================= */
+.status {
     display: inline-block;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: 5px 10px;
     font-size: 13px;
+    border-radius: 6px;
     font-weight: 500;
 }
 
-.badge.paid {
+.status-approved {
     background: #dcfce7;
     color: #166534;
 }
 
-.badge.unpaid {
-    background: #fee2e2;
-    color: #991b1b;
+.status-pending {
+    background: #e0e7ff;
+    color: #3730a3;
 }
 
 /* ================= ACTION MENU ================= */
@@ -138,125 +137,44 @@ body {
     cursor: pointer;
     font-size: 18px;
     color: #374151;
+    transition: 0.2s;
+}
+
+.action-btn:hover {
+    color: #2563eb;
 }
 
 .action-menu {
     display: none;
     position: absolute;
     right: 10px;
-    top: 30px;
+    top: 34px;
     background: #fff;
     width: 170px;
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     z-index: 10;
+    overflow: hidden;
 }
 
 .action-menu .menu-item {
     padding: 10px 14px;
-    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
     color: #111827;
+    cursor: pointer;
+    text-decoration: none;
     transition: 0.2s;
+}
+
+.action-menu .menu-item i {
+    width: 18px;
 }
 
 .action-menu .menu-item:hover {
     background: #f3f4f6;
-}
-
-/* ================= MODAL ================= */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.modal-content {
-    background: #fff;
-    width: 420px;
-    max-width: 90%;
-    padding: 22px;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    animation: popup 0.25s ease;
-}
-
-@keyframes popup {
-    from {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.modal-content h3 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    text-align: center;
-}
-
-/* ================= FORM ================= */
-.form-group {
-    margin-bottom: 14px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 9px 10px;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-}
-
-.form-group textarea {
-    resize: none;
-}
-
-/* ================= BUTTONS ================= */
-.btn-primary {
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.btn-primary:hover {
-    background: #1d4ed8;
-}
-
-.btn-secondary {
-    background: #e5e7eb;
-    color: #111827;
-    border: none;
-    padding: 10px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-left: 6px;
-}
-
-.btn-secondary:hover {
-    background: #d1d5db;
 }
 
 /* ================= FOOTER ================= */
