@@ -8,7 +8,6 @@ urlpatterns = [
     path('resource/', views.resource, name='resource'),
     path('borrow-requests/', views.borrow_request_list, name='borrow_request_list'),
     path('borrow/create/', views.create_borrow, name='create_borrow'),
-    path('admin/', admin.site.urls),
     path('fines/', views.fine_list, name='fine_list'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
