@@ -83,35 +83,14 @@ class BookCategory(models.Model):
         db_table = 'BOOK_CATEGORY'
         unique_together = ('book', 'category')
         
-
-
-class BorrowRecord(models.Model):
-    borrow_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(
-        'LibraryUser',
-        db_column='user_id',
-        on_delete=models.CASCADE
-    )
-    book = models.ForeignKey(
-        Book,
-        db_column='book_id',
-        on_delete=models.CASCADE
-    )
-    borrow_date = models.DateField(null=True, blank=True)
-    due_date = models.DateField()
-    status = models.CharField(max_length=20)
-    notified = models.BooleanField(default=False) 
-    class Meta:
-        managed = False
-        db_table = 'BORROW_RECORDS'
-
 class LibraryUser(models.Model):
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=255)
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField()
+    username = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=255, null=True, blank=True)
+    full_name = models.CharField(max_length=100, null=True, blank=True)
+    email = models.EmailField(max_length=100, unique=True, null=True, blank=True)
     created_at = models.DateTimeField()
+    role = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:
         managed = False
@@ -119,6 +98,48 @@ class LibraryUser(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class BorrowRecord(models.Model):
+
+    STATUS_CHOICES = [
+        ('pending', 'Chờ duyệt mượn'),
+        ('borrowing', 'Đang mượn'),
+        ('return_pending', 'Chờ duyệt trả'),
+        ('returned', 'Đã trả'),
+        ('late', 'Trễ hạn'),
+    ]
+
+    borrow_id = models.AutoField(primary_key=True)
+
+    user = models.ForeignKey(
+        LibraryUser,
+        db_column='user_id',
+        on_delete=models.CASCADE
+    )
+
+    book = models.ForeignKey(
+        Book,
+        db_column='book_id',
+        on_delete=models.CASCADE
+    )
+
+    borrow_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+
+    notified = models.BooleanField(default=False)
+
+    class Meta:
+        managed = False
+        db_table = 'BORROW_RECORDS'
+
+
 
 class BorrowHistory(models.Model):
     history_id = models.AutoField(primary_key=True)

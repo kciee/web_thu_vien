@@ -1,0 +1,87 @@
+{% extends 'app/base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/css/admin_borrow.css' %}">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Quản lý Mượn – Trả Sách</h1>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th>Người mượn</th>
+                        <th>Tên sách</th>
+                        <th class="text-center">Ngày mượn</th>
+                        <th class="text-center">Hạn trả</th>
+                        <th class="text-center">Trạng thái</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for borrow in borrows %}
+                    <tr>
+                        <td class="text-center">{{ borrow.borrow_id }}</td>
+
+                        <td>{{ borrow.user.full_name|default:borrow.user.username }}</td>
+
+                        <td class="fw-bold text-primary">{{ borrow.book.title }}</td>
+
+                        <td class="text-center">{{ borrow.borrow_date|date:"d/m/Y" }}</td>
+                        <td class="text-center">{{ borrow.due_date|date:"d/m/Y" }}</td>
+
+                        <td class="text-center">
+                            {% if borrow.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Chờ duyệt mượn</span>
+                            {% elif borrow.status == 'borrowing' %}
+                                <span class="badge bg-primary">Đang mượn</span>
+                            {% elif borrow.status == 'return_pending' %}
+                                <span class="badge bg-info text-dark">Chờ duyệt trả</span>
+                            {% elif borrow.status == 'returned' %}
+                                <span class="badge bg-success">Đã trả</span>
+                            {% elif borrow.status == 'late' %}
+                                <span class="badge bg-danger">Trễ hạn</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+
+                                {% if borrow.status == 'pending' %}
+                                <a href="{% url 'admin_approve_borrow' borrow.borrow_id %}"
+                                   class="btn btn-sm btn-success"
+                                   onclick="return confirm('Duyệt cho mượn sách này?');">
+                                    ✔ Duyệt mượn
+                                </a>
+                                {% endif %}
+
+                                {% if borrow.status == 'return_pending' %}
+                                <a href="{% url 'admin_approve_return' borrow.borrow_id %}"
+                                   class="btn btn-sm btn-primary"
+                                   onclick="return confirm('Xác nhận đã trả sách?');">
+                                    ✔ Duyệt trả
+                                </a>
+                                {% endif %}
+
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-3">
+                            Chưa có giao dịch mượn sách
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

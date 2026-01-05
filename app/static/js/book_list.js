@@ -1,11 +1,13 @@
- function toggleMenu(id) {
-        document.querySelectorAll('.action-menu')
-            .forEach(m => m.style.display = 'none');
-        const menu = document.getElementById('menu-' + id);
-        menu.style.display = 'block';
-    }
+function toggleMenu(id) {
+    document.querySelectorAll('.action-menu')
+        .forEach(m => m.style.display = 'none');
 
-    function openDetail(el) {
+    const menu = document.getElementById('menu-' + id);
+    if (menu) menu.style.display = 'block';
+}
+
+/* ================= CHI TIẾT ================= */
+function openDetail(el) {
     const title = el.dataset.title;
     const description = el.dataset.description;
 
@@ -15,38 +17,63 @@
     document.getElementById("detailModal").style.display = "flex";
 }
 
+function closeDetail() {
+    document.getElementById('detailModal').style.display = 'none';
+}
 
-    function closeDetail() {
-        document.getElementById('detailModal').style.display = 'none';
-    }
+/* ================= MƯỢN SÁCH (ĐÃ SỬA) ================= */
+function openBorrow(bookId) {
+    const modal = document.getElementById('borrowModal');
+    modal.style.display = 'flex';
 
-    function openBorrow(id) {
-        document.getElementById('borrowBookId').value = id;
-        document.getElementById('borrowModal').style.display = 'flex';
-    }
+    document.getElementById('borrowBookId').value = bookId;
 
-    function closeBorrow() {
-        document.getElementById('borrowModal').style.display = 'none';
-    }
+    const today = new Date();
 
-    window.onclick = function (e) {
-        if (e.target.classList.contains('modal')) {
-            e.target.style.display = 'none';
-        }
+    // ===== Ngày mượn = hôm nay =====
+    const borrowDate = today.toISOString().split('T')[0];
+    const borrowInput = document.getElementById('borrowDate');
+    borrowInput.value = borrowDate;
+    borrowInput.readOnly = true;
+
+    // ===== Ngày trả: từ +1 → +7 =====
+    const minReturn = new Date(today);
+    minReturn.setDate(today.getDate() + 1);
+
+    const maxReturn = new Date(today);
+    maxReturn.setDate(today.getDate() + 7);
+
+    const returnInput = document.getElementById('returnDate');
+    returnInput.min = minReturn.toISOString().split('T')[0];
+    returnInput.max = maxReturn.toISOString().split('T')[0];
+
+    // mặc định chọn +7 ngày
+    returnInput.value = returnInput.max;
+}
+
+function closeBorrow() {
+    document.getElementById('borrowModal').style.display = 'none';
+}
+
+/* ================= CLICK NGOÀI MODAL ================= */
+window.onclick = function (e) {
+    if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
     }
-    function openReview(bookId, title) {
+}
+
+/* ================= REVIEW ================= */
+function openReview(bookId, title) {
     document.getElementById('reviewModal').style.display = 'flex';
     document.getElementById('reviewBookTitle').innerText = 'Đánh giá: ' + title;
     document.getElementById('reviewBookId').value = bookId;
 
-    // Ẩn tất cả review
-    document.querySelectorAll('.reviews').forEach(r => r.style.display = 'none');
+    document.querySelectorAll('.reviews')
+        .forEach(r => r.style.display = 'none');
 
-    // Hiện review đúng sách
     const reviewBox = document.getElementById('reviews-' + bookId);
     if (reviewBox) reviewBox.style.display = 'block';
 
-    // Set action form
     document.getElementById('reviewForm').action = `/books/${bookId}/review/`;
 }
 
