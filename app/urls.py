@@ -14,7 +14,16 @@ urlpatterns = [
     path('profile/', views.home, name='profile'),
     path('add_book/', views.add_book, name='add_book'),
     path('books/<int:book_id>/review/', views.add_review, name='add_review'),
+    path('borrow/<int:borrow_id>/return/', views.request_return, name='request_return'),
+
     #admin
+    path('borrow/<int:borrow_id>/approve-return/', views.approve_return),
+    path('borrow/<int:borrow_id>/reject-return/', views.reject_return),
+    # ✅ ĐÚNG
+path('dashboard/borrow/', views.admin_borrow_manage, name='admin_borrow_manage'),
+path('dashboard/borrow/<int:borrow_id>/approve/', views.admin_approve_borrow, name='admin_approve_borrow'),
+path('dashboard/borrow/<int:borrow_id>/return/', views.admin_approve_return, name='admin_approve_return'),
+
     path('dashboard/', views.dashboard, name='dashboard'),
     path('books_manage/', views.bookList, name='bookList'),
     path('readers/', views.readerList, name='readerList'),

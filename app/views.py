@@ -7,11 +7,138 @@ from .models import BorrowHistory
 from .models import Review
 from .ai.sentiment import analyze_sentiment
 from django.utils import timezone
+from django.contrib.admin.views.decorators import staff_member_required
 
 def create_borrow(request):
     if request.method == 'POST':
-        # tạm thời chưa xử lý DB
-        return redirect('book_list')
+        book_id = request.POST.get('book_id')
+        borrow_date = request.POST.get('borrow_date')
+        due_date = request.POST.get('return_date')
+
+        book = get_object_or_404(Book, pk=book_id)
+
+        user = LibraryUser.objects.first()  # TẠM (sau này thay bằng user login)
+
+        BorrowRecord.objects.create(
+            user=user,
+            book=book,
+            borrow_date=borrow_date,
+            due_date=due_date,
+            status='pending'
+        )
+
+        return redirect('borrow_request_list')
+
+@staff_member_required
+def admin_borrow_manage(request):
+    borrows = BorrowRecord.objects.select_related(
+        'user', 'book'
+    ).order_by('-borrow_id')
+
+    return render(request, 'app/admin_borrow_manage.html', {
+        'borrows': borrows
+    })
+    
+@staff_member_required
+def admin_approve_borrow(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
+
+    if borrow.status == 'pending' and borrow.book.quantity > 0:
+        borrow.status = 'borrowing'
+        borrow.book.quantity -= 1
+
+        borrow.book.save()
+        borrow.save()
+
+    return redirect('admin_borrow_manage')
+
+from datetime import date
+from .models import BorrowHistory
+
+@staff_member_required
+def admin_approve_return(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
+
+    if borrow.status == 'return_pending':
+        today = date.today()
+
+        days_late = max((today - borrow.due_date).days, 0)
+        fine = days_late * 2000 if days_late > 14 else 0
+
+        BorrowHistory.objects.create(
+            borrow=borrow,
+            returned_at=today,
+            days_late=days_late,
+            fine=fine
+        )
+
+        borrow.status = 'returned'
+        borrow.book.quantity += 1
+
+        borrow.book.save()
+        borrow.save()
+
+    return redirect('admin_borrow_manage')
+
+
+def request_return(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, pk=borrow_id)
+
+    # chỉ cho phép trả khi đang mượn
+    if borrow.status == 'borrowing':
+        borrow.status = 'return_pending'
+        borrow.save()
+
+    return redirect('borrow_request_list')
+
+from datetime import date
+
+def approve_return(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, pk=borrow_id)
+
+    if borrow.status == 'return_pending':
+        borrow.status = 'returned'
+        borrow.save()
+
+        days_late = max((date.today() - borrow.due_date).days, 0)
+        fine = days_late * 2000 if days_late > 0 else 0
+
+        BorrowHistory.objects.create(
+            borrow=borrow,
+            returned_at=date.today(),
+            days_late=days_late,
+            fine=fine
+        )
+
+        # tăng lại số lượng sách
+        borrow.book.quantity += 1
+        borrow.book.save()
+
+    return redirect('dashboard')
+
+def reject_return(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, pk=borrow_id)
+
+    if borrow.status == 'return_pending':
+        borrow.status = 'borrowing'  # quay lại đang mượn
+        borrow.save()
+
+    return redirect('dashboard')
+
+
+# admin  duyệt mượn
+@staff_member_required
+def admin_approve_borrow(request, borrow_id):
+    borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
+
+    if borrow.status == 'pending' and borrow.book.quantity > 0:
+        borrow.status = 'borrowing'
+        borrow.book.quantity -= 1
+
+        borrow.book.save()
+        borrow.save()
+
+    return redirect('admin_borrow_manage')
 
 
 

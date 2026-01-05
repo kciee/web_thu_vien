@@ -174,3 +174,50 @@ body {
     font-size: 14px;
     color: #6b7280;
 }
+/* ================= BUTTON: YÊU CẦU TRẢ ================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+
+    transition: all 0.25s ease;
+}
+
+/* Nút yêu cầu trả */
+.btn-warning {
+    background: #f59e0b;           /* vàng cam */
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
+}
+
+/* Hover */
+.btn-warning:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.45);
+}
+
+/* Active (khi click) */
+.btn-warning:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(217, 119, 6, 0.35);
+}
+
+/* Disabled (nếu sau này cần) */
+.btn-warning.disabled,
+.btn-warning:disabled {
+    background: #fcd34d;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+}

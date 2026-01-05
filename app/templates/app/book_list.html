@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/book_list.css' %}">
-    <script src="{% static 'js/book_list.js' %}"></script>
 </head>
 
 <body>
@@ -80,7 +79,7 @@
             </div>
         
             <div class="menu-item" 
-                onclick="openBorrow('{{ book.book_id }}', '{{ book.title|escapejs }}')">
+                onclick="openBorrow('{{ book.book_id }}')">
                 <i class="fa fa-book"></i> Mượn sách
             </div>
 
@@ -129,12 +128,12 @@
 
             <div class="form-group">
                 <label>Ngày mượn</label>
-                <input type="date" name="borrow_date" required>
+                <input type="date" name="borrow_date" id="borrowDate" readonly>
             </div>
 
             <div class="form-group">
-                <label>Ngày trả</label>
-                <input type="date" name="return_date" required>
+                <label>Ngày trả (tối đa 7 ngày)</label>
+                <input type="date" name="return_date" id="returnDate" >
             </div>
 
             <button class="btn-primary" type="submit">Xác nhận</button>
@@ -142,6 +141,7 @@
         </form>
     </div>
 </div>
+
 
 <div class="modal" id="reviewModal">
     <div class="modal-content">
@@ -208,5 +208,7 @@
     </div>
 </footer>
 
+<script src="{% static 'js/book_list.js' %}"></script>
 </body>
+
 </html>

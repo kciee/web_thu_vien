@@ -38,6 +38,7 @@
                     <th>Loại</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
+                    <th>Kết quả</th>
                 </tr>
             </thead>
 
@@ -50,27 +51,53 @@
 
 
                     <td>
-                        {% if r.request_type == 'borrow' %}
-                            <span class="badge badge-blue">Yêu cầu mượn</span>
+                        {% if r.status == 'pending' or r.status == 'borrowing' %}
+                             <span class="badge badge-blue">Yêu cầu mượn</span>
                         {% else %}
-                            <span class="badge badge-yellow">Yêu cầu trả</span>
+                             <span class="badge badge-yellow">Yêu cầu trả</span>
                         {% endif %}
                     </td>
+
 
                     <td>
                         {% if r.status == 'pending' %}
-                            <span class="status status-pending">Đang chờ</span>
-                        {% elif r.status == 'approved' %}
-                            <span class="status status-approved">Được chấp nhận</span>
-                        {% else %}
-                            <span class="status status-rejected">Bị từ chối</span>
+                        <span class="status status-pending">Đang chờ duyệt mượn</span>
+                        {% elif r.status == 'borrowing' %}
+                        <span class="status status-approved">Đang mượn</span>
+                        {% elif r.status == 'return_pending' %}
+                        <span class="status status-pending">Chờ duyệt trả</span>
+                        {% elif r.status == 'returned' %}
+                        <span class="status status-approved">Đã trả</span>
                         {% endif %}
                     </td>
 
 
-                    <td class="action-col">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
+
+                   <td class="action-col">
+
+                        {% if r.status == 'pending' %}
+                        <span class="status status-pending">🕒 Đang chờ duyệt</span>
+
+                        {% elif r.status == 'borrowing' %}
+                        <a href="{% url 'request_return' r.borrow_id %}"
+                        class="btn btn-warning">
+                         Yêu cầu trả
+                        </a>
+
+                        {% elif r.status == 'return_pending' %}
+                        <span class="status status-pending">📤 Đã gửi yêu cầu trả</span>
+
+                        {% elif r.status == 'returned' %}
+                        <span class="status status-approved">✅ Trả sách thành công</span>
+
+                        {% elif r.status == 'late' %}
+                        <span class="status status-rejected">⚠ Trễ hạn</span>
+
+                        {% endif %}
+
                     </td>
+
+
                 </tr>
                 {% empty %}
                 <tr>
