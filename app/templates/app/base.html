@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -15,7 +16,7 @@
             z-index: 100;
             padding: 48px 0 0;
             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-            background-color: #212529;
+            background-color: #1e293b;
         }
         .sidebar-sticky { position: relative; top: 0; height: calc(100vh - 48px); padding-top: .5rem; overflow-x: hidden; overflow-y: auto; }
         
@@ -24,6 +25,11 @@
         .nav-link .bi { margin-right: 8px; }
 
         .main-content { margin-left: 16.66667%; padding: 20px; }
+        .table-dark th {
+            background-color: #2563eb ;
+            border-color: #2563eb ;
+            color: white ;
+        }
     </style>
 </head>
 <body>
@@ -34,7 +40,10 @@
         <nav class="col-md-2 d-none d-md-block sidebar">
             <div class="sidebar-sticky">
                 <div class="text-center text-white mb-4">
-                    <i class="bi bi-book-half fs-1"></i>
+                    <img src="{% static 'images/library-icon.png' %}" 
+                        alt="LibraryHub Logo" 
+                        class="img-fluid" 
+                        style="max-width: 120px; height: auto;">
                     <h5 class="mt-2">Library Admin</h5>
                 </div>
                 
