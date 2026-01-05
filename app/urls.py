@@ -11,6 +11,7 @@ urlpatterns = [
     path('fines/', views.fine_list, name='fine_list'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    path('logout/', views.user_logout, name='logout'),
     path('profile/', views.home, name='profile'),
     path('add_book/', views.add_book, name='add_book'),
     path('books/<int:book_id>/review/', views.add_review, name='add_review'),

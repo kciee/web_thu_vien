@@ -5,20 +5,28 @@
     </div>
 
     <nav>
-    <a href="{% url 'home' %}"
+    <!-- <a href="{% url 'home' %}"
        class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
         Trang chủ
-    </a>
+    </a> -->
 
-    <a href="{% url 'resource' %}"
-       class="{% if request.resolver_match.url_name == 'resource' %}active{% endif %}">
-        Tài nguyên
-    </a>
+    <a href="{% url 'home' %}">Trang chủ</a>
 
-    <a href="{% url 'login' %}"
+    {% if request.session.user_id %}
+        {% if request.session.role == 'admin' %}
+            <a href="{% url 'dashboard' %}">Quản trị</a>
+        {% else %}
+            <a href="{% url 'book_list' %}">Người dùng</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Đăng xuất</a>
+    {% else %}
+        <a href="{% url 'login' %}">Đăng nhập</a>
+    {% endif %}
+
+    <!-- <a href="{% url 'login' %}"
        class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
-        Cá nhân
-    </a>
+        Đăng nhập
+    </a> -->
 </nav>
 
 </header>

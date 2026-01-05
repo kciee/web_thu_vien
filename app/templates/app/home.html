@@ -7,75 +7,53 @@
 {% block content %}
     <main class="main-content">
 
-    <!-- BANNER -->
     <section class="banner-slider">
-        <div class="slides">
+    <div class="slides">
 
-            <div class="slide active">
-                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 1">
-                <div class="caption">
-                    <h2>Chào mừng đến LibraryHub</h2>
-                    <p>Kho tri thức mở dành cho mọi người</p>
-                </div>
+        <div class="slide active">
+            <img src="{% static 'images/banner1.jpg' %}" alt="Banner 1">
+            <div class="caption">
+                <h2>Chào mừng đến LibraryHub</h2>
+                <p>Kho tri thức mở dành cho mọi người</p>
             </div>
-
-            <div class="slide">
-                <img src="{% static 'images/banner2.jpg' %}" alt="Banner 2">
-                <div class="caption">
-                    <h2>Học tập mọi lúc</h2>
-                    <p>Truy cập tài nguyên mọi nơi</p>
-                </div>
-            </div>
-
-            <div class="slide">
-                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 3">
-                <div class="caption">
-                    <h2>Thư viện số</h2>
-                    <p>Hàng nghìn sách và tài liệu</p>
-                </div>
-            </div>
-
-            <div class="slide">
-                <img src="{% static 'images/banner2.jpg' %}" alt="Banner 4">
-                <div class="caption">
-                    <h2>Chia sẻ tri thức</h2>
-                    <p>Kết nối cộng đồng học tập</p>
-                </div>
-            </div>
-
-            <div class="slide">
-                <img src="{% static 'images/banner1.jpg' %}" alt="Banner 5">
-                <div class="caption">
-                    <h2>Khám phá ngay</h2>
-                    <p>Bắt đầu hành trình học tập</p>
-                </div>
-            </div>
-
         </div>
 
-        <!-- DOTS -->
-        <div class="dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+        <div class="slide">
+            <img src="{% static 'images/banner2.jpg' %}" alt="Banner 2">
+            <div class="caption">
+                <h2>Học tập mọi lúc</h2>
+                <p>Truy cập tài nguyên mọi nơi</p>
+            </div>
         </div>
-    </section>
 
-    <!-- SEARCH -->
-    <section class="search-section">
-        <div class="search-box">
-            <form class="search-form" method="get">
-                <input
-                    type="text"
-                    name="q"
-                    placeholder="Nhập tên sách, tác giả, từ khóa..."
-                >
-                <button type="submit">Tìm kiếm</button>
-            </form>
+        <div class="slide">
+            <img src="{% static 'images/banner1.jpg' %}" alt="Banner 3">
+            <div class="caption">
+                <h2>Thư viện số</h2>
+                <p>Hàng nghìn sách và tài liệu</p>
+            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- SEARCH OVER BANNER -->
+    <div class="search-overlay">
+        <form class="search-form" method="get">
+            <input
+                type="text"
+                name="q"
+                placeholder="Nhập tên sách, tác giả, từ khóa..."
+            >
+            <button type="submit">Tìm kiếm</button>
+        </form>
+    </div>
+
+    <!-- DOTS
+    <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div> -->
+</section>
 
     <!-- INTRO -->
 <section class="intro-section">
@@ -113,38 +91,46 @@
     </div>
 </section>
 
-<!-- SÁCH MỚI -->
-<!-- SÁCH MỚI -->
-<section class="new-books-section">
-    <div class="section-header">
-        <h2>Sách mới</h2>
-        <a href="{% url 'resource' %}" class="view-all">Xem tất cả →</a>
-    </div>
-
-    <div class="new-books-grid">
-        {% for book in new_books %}
-        <div class="book-card" onclick="openPopup('{{ book.id }}')">
-            <img src="{{ book.image.url }}" alt="{{ book.title }}">
-            <h4>{{ book.title }}</h4>
-            <p class="author">{{ book.author }}</p>
-            <div class="book-meta">
-                <span class="tag">{{ book.category.name }}</span>
-                {% if book.available %}
-                    <span class="status available">Có sẵn</span>
-                {% else %}
-                    <span class="status borrowed">Đã mượn</span>
-                {% endif %}
-            </div>
-            <div class="book-stats">
-                <span>{{ book.rating }}/5</span>
-                <span>{{ book.borrow_count }} lượt mượn</span>
-            </div>
-        </div>
-        {% empty %}
-        <p>Chưa có sách mới nào.</p>
+<div class="new-books-grid">
+    {% for book in new_books %}
+    <div class="book-card">
+        <img src="{{ book.image_url }}" alt="{{ book.title }}">
+        <h4>{{ book.title }}</h4>
+        <p class="author">
+            {% for author in book.authors.all %}
+                {{ author.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Không có tác giả
+            {% endfor %}
+        </p>
+        <div class="book-meta">
+            <span class="tag">
+                   {% with book.categories.all|slice:":4" as top_categories %}
+    {% if top_categories %}
+        {% for cat in top_categories %}
+            {{ cat.category_name }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
+        {% if book.categories.count > 4 %}
+            , +{{ book.categories.count|add:"-4" }}
+        {% endif %}
+    {% else %}
+        Không có danh mục
+    {% endif %}
+{% endwith %}
+            </span>
+            {% if book.quantity > 0 %}
+                <span class="status available">Có sẵn</span>
+            {% else %}
+                <span class="status borrowed">Đã mượn</span>
+            {% endif %}
+        </div>
     </div>
-</section>
+    {% empty %}
+    <p>Chưa có sách mới nào.</p>
+    {% endfor %}
+</div>
+
+
 
 
 
@@ -188,7 +174,7 @@
 
 
 {% block javascript %}
-<script src="{% static 'js/home.js' %}"></script>
+<script src="{% static 'js/banner.js' %}"></script>
 {% endblock %}
 
     
