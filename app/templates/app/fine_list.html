@@ -1,86 +1,106 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Danh sách hình phạt</title>
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <title>Danh sách hình phạt</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/fine_list.css' %}">
-</head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'css/fine_list.css' %}">
+    </head>
 
-<body>
+    <body>
 
-<div class="layout">
+    <div class="layout">
 
-<!-- ========== SIDEBAR ========== -->
-<aside class="sidebar">
-    <div class="logo">
-        <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="{% static 'images/library-icon.png' %}" alt="LibraryHub Logo" class="logo-image">
+        </div>
+        <ul>
+            <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>
+            <li><a href="{% url 'borrow_request_list' %}">Danh sách yêu cầu đã tạo</a></li>
+            <li><a href="{% url 'fine_list' %}" class="active">Danh sách hình phạt</a></li>
+            <li><a href="#">Cài đặt</a></li>
+        </ul>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+        <h1 class="page-title">Danh sách hình phạt</h1>
+
+        <div class="table-container">
+            <table class="request-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Mã mượn</th>
+                        <th>Tiêu đề</th>
+                        <th>Số tiền</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for fine in fines %}
+                    <tr>
+                        <td>{{ fine.history_id }}</td>
+                        <td>{{ fine.borrow.borrow_id }}</td>
+                        <td>{{ fine.borrow.book.title }}</td>
+                        <td>{{ fine.fine }} đ</td>
+
+                        <td class="action-cell">
+
+                            {% if fine.fine == 0 %}
+                            <span class="status status-approved">Không phạt</span>
+
+                            {% elif fine.payment %}
+                            {% if fine.payment.status == 'pending' %}
+                            <span class="status status-pending">Chờ admin duyệt</span>
+                            {% elif fine.payment.status == 'approved' %}
+                            <span class="status status-approved">Đã thanh toán</span>
+                            {% elif fine.payment.status == 'rejected' %}
+                            <span class="status status-rejected">Bị từ chối</span>
+                            {% endif %}
+
+                            {% else %}
+                            <span class="status status-pending">Chưa thanh toán</span>
+
+                            <i class="fa fa-ellipsis-v action-btn"
+                            onclick="toggleMenu('{{ fine.history_id|escapejs }}')"></i>
+
+                            <div class="action-menu" id="menu-{{ fine.history_id }}">
+                                <a href="{% url 'pay_fine' fine.history_id %}"
+                                class="menu-item"
+                                onclick="return confirm('Gửi yêu cầu thanh toán?');">
+                                <i class="fa fa-money-bill"></i> Gửi yêu cầu thanh toán
+                                </a>
+                                </div>
+                                {% endif %}
+
+                        </td>
+
+
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty">Không có hình phạt nào</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
     </div>
-    <ul>
-        <li><a href="{% url 'book_list' %}">Danh mục sách</a></li>
-        <li><a href="{% url 'borrow_request_list' %}">Danh sách yêu cầu đã tạo</a></li>
-        <li><a href="{% url 'fine_list' %}" class="active">Danh sách hình phạt</a></li>
-        <li><a href="#">Cài đặt</a></li>
-    </ul>
-</aside>
 
-<!-- ========== MAIN ========== -->
-<main class="main">
-    <h1 class="page-title">Danh sách hình phạt</h1>
-
-    <div class="table-container">
-        <table class="request-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Mã mượn</th>
-                    <th>Tiêu đề</th>
-                    <th>Số tiền</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for fine in fines %}
-                <tr>
-                    <td>{{ fine.id }}</td>
-                    <td>{{ fine.borrow.borrow_id }}</td>
-                    <td>{{ fine.borrow.book.title }}</td>
-                    <td>{{ fine.amount }} đ</td>
-
-                    <td class="action-cell">
-                        <i class="fa fa-ellipsis-v action-btn"></i>
-
-                        <div class="action-menu">
-                            <div class="menu-item">
-                                <i class="fa fa-eye"></i> Xem chi tiết
-                            </div>
-                            <div class="menu-item">
-                                <i class="fa fa-money-bill"></i> Đã thanh toán
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="empty">Không có hình phạt nào</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</main>
-
-</div>
-
-<!-- ========== FOOTER ========== -->
-<footer class="site-footer">
-    <div class="footer-bottom">
-        © 2025 LibraryHub
-    </div>
-</footer>
-
-</body>
-</html>
+    <!-- ========== FOOTER ========== -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            © 2025 LibraryHub
+        </div>
+    </footer>
+    <script src="{% static 'js/fine.js' %}"></script>
+    </body>
+    </html>

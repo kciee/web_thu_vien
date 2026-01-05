@@ -151,6 +151,8 @@ class BorrowHistory(models.Model):
     returned_at = models.DateField()
     days_late = models.IntegerField()
     fine = models.IntegerField()
+    is_paid = models.BooleanField(default=False)
+
 
     class Meta:
         db_table = 'BORROW_HISTORY'
@@ -195,3 +197,37 @@ class Notification(models.Model):
     class Meta:
         managed = False
         db_table = 'NOTIFICATIONS'
+
+class PaymentRequest(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+
+    history = models.OneToOneField(
+        BorrowHistory,
+        on_delete=models.CASCADE,
+        db_column='history_id',
+        related_name='payment'
+    )
+
+    requested_at = models.DateTimeField()
+    approved_at = models.DateTimeField(null=True, blank=True)
+
+    STATUS_CHOICES = [
+        ('pending', 'Chờ duyệt'),
+        ('approved', 'Đã duyệt'),
+        ('rejected', 'Từ chối'),
+    ]
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
+
+    class Meta:
+        managed = False               # 🔴 RẤT QUAN TRỌNG
+        db_table = 'PAYMENT_REQUESTS' # 🔴 ĐÚNG TÊN BẢNG SQL
+
+    def __str__(self):
+        return f"Payment #{self.payment_id} - {self.status}"
+
+

@@ -29,11 +29,13 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 30px;
+
 }
 
 .logo-image {
-    width: 42px;
-    height: 42px;
+    width: 130px;
+    height: 130px;
+
 }
 
 .sidebar ul {

@@ -8,6 +8,71 @@ from .models import Review
 from .ai.sentiment import analyze_sentiment
 from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
+from datetime import date
+from django.contrib import messages
+from .models import PaymentRequest
+
+def calculate_fine(due_date, return_date=None):
+    if not return_date:
+        return_date = date.today()
+
+    days_late = (return_date - due_date).days
+
+    if days_late <= 0:
+        return 0, 0
+    elif days_late <= 7:
+        return days_late, days_late * 5000
+    else:
+        return days_late, 100000
+
+from django.utils import timezone
+
+@staff_member_required
+def approve_payment(request, payment_id):
+    payment = get_object_or_404(PaymentRequest, payment_id=payment_id)
+
+    if payment.status != 'pending':
+        return redirect('admin_payment_list')
+
+    payment.status = 'approved'
+    payment.approved_at = timezone.now()
+    payment.save()
+
+    history = payment.history
+    history.is_paid = True
+    history.save()
+
+    return redirect('admin_payment_list')
+
+
+@staff_member_required
+def admin_payment_list(request):
+    payments = PaymentRequest.objects.select_related(
+        'history__borrow__book',
+        'history__borrow__user'
+    ).order_by('-requested_at')
+
+    return render(request, 'app/payment_list.html', {
+        'payments': payments
+    })
+
+
+def request_payment(request, history_id):
+    history = get_object_or_404(BorrowHistory, history_id=history_id)
+
+    if history.fine == 0:
+        messages.error(request, "Không có tiền phạt.")
+        return redirect('fine_list')
+
+    # tránh gửi trùng
+    if hasattr(history, 'payment'):
+        messages.warning(request, "Bạn đã gửi yêu cầu thanh toán.")
+        return redirect('fine_list')
+
+    PaymentRequest.objects.create(history=history)
+    messages.success(request, "Đã gửi yêu cầu thanh toán. Chờ admin duyệt.")
+
+    return redirect('fine_list')
 
 def create_borrow(request):
     if request.method == 'POST':
@@ -60,23 +125,23 @@ def admin_approve_return(request, borrow_id):
     borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
 
     if borrow.status == 'return_pending':
-        today = date.today()
+        borrow.status = 'returned'
+        borrow.save()
 
-        days_late = max((today - borrow.due_date).days, 0)
-        fine = days_late * 2000 if days_late > 14 else 0
+        return_date = date.today()
+        days_late, fine_amount = calculate_fine(borrow.due_date, return_date)
 
         BorrowHistory.objects.create(
             borrow=borrow,
-            returned_at=today,
+            returned_at=return_date,
             days_late=days_late,
-            fine=fine
+            fine=fine_amount,
+            is_paid=False
         )
 
-        borrow.status = 'returned'
+        # tăng lại số lượng sách
         borrow.book.quantity += 1
-
         borrow.book.save()
-        borrow.save()
 
     return redirect('admin_borrow_manage')
 
@@ -91,31 +156,6 @@ def request_return(request, borrow_id):
 
     return redirect('borrow_request_list')
 
-from datetime import date
-
-def approve_return(request, borrow_id):
-    borrow = get_object_or_404(BorrowRecord, pk=borrow_id)
-
-    if borrow.status == 'return_pending':
-        borrow.status = 'returned'
-        borrow.save()
-
-        days_late = max((date.today() - borrow.due_date).days, 0)
-        fine = days_late * 2000 if days_late > 0 else 0
-
-        BorrowHistory.objects.create(
-            borrow=borrow,
-            returned_at=date.today(),
-            days_late=days_late,
-            fine=fine
-        )
-
-        # tăng lại số lượng sách
-        borrow.book.quantity += 1
-        borrow.book.save()
-
-    return redirect('dashboard')
-
 def reject_return(request, borrow_id):
     borrow = get_object_or_404(BorrowRecord, pk=borrow_id)
 
@@ -127,18 +167,6 @@ def reject_return(request, borrow_id):
 
 
 # admin  duyệt mượn
-@staff_member_required
-def admin_approve_borrow(request, borrow_id):
-    borrow = get_object_or_404(BorrowRecord, borrow_id=borrow_id)
-
-    if borrow.status == 'pending' and borrow.book.quantity > 0:
-        borrow.status = 'borrowing'
-        borrow.book.quantity -= 1
-
-        borrow.book.save()
-        borrow.save()
-
-    return redirect('admin_borrow_manage')
 
 
 
@@ -173,11 +201,15 @@ def borrow_request_list(request):
 def fine_list(request):
     fines = BorrowHistory.objects.select_related(
         'borrow__user',
-        'borrow__book'
-    )
+        'borrow__book',
+        'payment'   # 🔥 QUAN TRỌNG
+    ).order_by('-history_id')
+
     return render(request, 'app/fine_list.html', {
         'fines': fines
     })
+
+
 
 def add_review(request, book_id):
     if request.method == 'POST':
