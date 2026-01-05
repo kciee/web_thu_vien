@@ -8,6 +8,9 @@ from .models import Review
 from .ai.sentiment import analyze_sentiment
 from django.utils import timezone
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
+from .models import LibraryUser
+from django.contrib.auth.hashers import make_password, check_password
 
 def create_borrow(request):
     if request.method == 'POST':
@@ -143,13 +146,76 @@ def admin_approve_borrow(request, borrow_id):
 
 
 def home(request):
-    return render(request, 'app/home.html')
+    # Lấy 6 cuốn sách mới nhất
+    new_books = Book.objects.all().order_by('-book_id')[:6]
+
+    # Gửi vào template
+    context = {
+        'new_books': new_books
+    }
+
+    return render(request, 'app/home.html', context)
 # Create your views here.
 def login(request):
-    return render(request, 'app/login.html')
+    error = None
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = LibraryUser.objects.get(username=username)
+            if check_password(password, user.password):
+                # Lưu session
+                request.session['user_id'] = user.user_id
+                request.session['username'] = user.username
+                request.session['full_name'] = user.full_name
+                request.session['role'] = user.role
+                if user.role == 'admin':
+                    return redirect('dashboard')
+                else:
+                    return redirect('book_list')
+            else:
+                error = 'Sai mật khẩu'
+        except LibraryUser.DoesNotExist:
+            error = 'Người dùng không tồn tại'
+
+    return render(request, 'app/login.html', {'error': error})
+
+def user_logout(request):
+    request.session.flush()  # xóa toàn bộ session
+    return redirect('login')
+
 
 def register(request):
-    return render(request, 'app/register.html')
+    error = None
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        full_name = request.POST.get('full_name')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Kiểm tra mật khẩu
+        if password != confirm_password:
+            error = 'Mật khẩu không khớp'
+        # Kiểm tra username/email trùng
+        elif LibraryUser.objects.filter(username=username).exists():
+            error = 'Username đã tồn tại'
+        elif LibraryUser.objects.filter(email=email).exists():
+            error = 'Email đã tồn tại'
+        else:
+            # Lưu vào DB
+            LibraryUser.objects.create(
+                username=username,
+                email=email,
+                full_name=full_name,
+                password=make_password(password),  # hash password
+                created_at=timezone.now(),
+                role='user'
+            )
+            return redirect('login')
+
+    return render(request, 'app/register.html', {'error': error})
 
 
 def book_list(request):

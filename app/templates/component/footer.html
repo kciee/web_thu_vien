@@ -7,18 +7,29 @@
         </div>
 
         <div class="footer-col links">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="{% url 'home' %}">Trang chủ</a></li>
-                <a href="{% url 'resource'%}">Tài nguyên</a>
-                <li><a href="{% url 'login' %}">Cá nhân</a></li>
-            </ul>
-        </div>
+    <h4>Quick Links</h4>
+    <ul>
+        <li><a href="{% url 'home' %}">Trang chủ</a></li>
+
+        {% if request.session.user_id %}
+            {% if request.session.role == 'admin' %}
+                <li><a href="{% url 'dashboard' %}">Quản trị</a></li>
+            {% else %}
+                <li><a href="{% url 'book_list' %}">Người dùng</a></li>
+            {% endif %}
+            <li><a href="{% url 'logout' %}">Đăng xuất</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Cá nhân</a></li>
+            <li><a href="{% url 'login' %}">Đăng nhập</a></li>
+        {% endif %}
+    </ul>
+</div>
 
         <div class="footer-col contact">
             <h4>Liên hệ</h4>
             <p>Email: info@libraryhub.example</p>
             <p>Hotline: 0123 456 789</p>
+            <p><a href="https://bom.so/zHkxC6" target="_blank">Địa chỉ: Khu phố 6, P. Linh Trung, TP. Thủ Đức, TP. Hồ Chí Minh</a></p>
         </div>
 
         <div class="footer-col visit-newsletter">
