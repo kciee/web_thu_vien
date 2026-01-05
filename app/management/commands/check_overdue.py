@@ -1,9 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.core.mail import send_mail
-
 from app.models import BorrowRecord, Notification
-
+from django.conf import settings
 
 class Command(BaseCommand):
     help = 'Check overdue borrow records and notify users'
@@ -33,9 +32,9 @@ class Command(BaseCommand):
                 send_mail(
                     subject='Thông báo quá hạn mượn sách',
                     message=f"Sách '{book.title}' bạn mượn đã quá hạn từ {record.due_date}.",
-                    from_email='admin@library.com',
+                    from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[user.email],
-                    fail_silently=True
+                    fail_silently=False
                 )
 
             # 3️⃣ Update trạng thái
