@@ -14,6 +14,7 @@ from django.contrib import messages
 from .models import PaymentRequest
 from django.http import JsonResponse
 import feedparser
+from django.db.models import Q
 
 
 def vnexpress_news(request):
@@ -191,17 +192,28 @@ def reject_return(request, borrow_id):
 # admin  duyệt mượn
 
 
+def search(request):
+    keyword = request.GET.get('q', '').strip()
+
+    results = Book.objects.none()
+
+    if keyword:
+        results = Book.objects.filter(
+            Q(title__icontains=keyword) |
+            Q(authors__name__icontains=keyword)
+        ).distinct()
+
+    return render(request, 'app/search.html', {
+        'keyword': keyword,
+        'results': results
+    })
 
 def home(request):
-    # Lấy 6 cuốn sách mới nhất
     new_books = Book.objects.all().order_by('-book_id')[:6]
-
-    # Gửi vào template
-    context = {
+    return render(request, 'app/home.html', {
         'new_books': new_books
-    }
+    })
 
-    return render(request, 'app/home.html', context)
 # Create your views here.
 def login(request):
     error = None

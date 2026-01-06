@@ -6,6 +6,7 @@ urlpatterns = [
 
     path('api/news/', views.vnexpress_news, name='api_news'),
     path('', views.home, name='home'),
+    path('search/', views.search, name='search'),
     path('books/', views.book_list, name='book_list'),
     path('resource/', views.resource, name='resource'),
     path('borrow-requests/', views.borrow_request_list, name='borrow_request_list'),

@@ -37,14 +37,14 @@
 
     <!-- SEARCH OVER BANNER -->
     <div class="search-overlay">
-        <form class="search-form" method="get">
-            <input
-                type="text"
-                name="q"
-                placeholder="Nhập tên sách, tác giả, từ khóa..."
-            >
-            <button type="submit">Tìm kiếm</button>
-        </form>
+        <form class="search-form" method="get" action="{% url 'search' %}">
+    <input
+        type="text"
+        name="q"
+        placeholder="Tìm sách, tác giả..."
+    >
+    <button type="submit">Tìm kiếm</button>
+</form>
     </div>
 
 </section>

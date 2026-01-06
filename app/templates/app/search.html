@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Kết quả tìm kiếm{% endblock %}
+{% block css %}{% static 'css/search.css' %}{% endblock %}
+{% block content %}
+<main class="main-content">
+
+<h2 class="search-title">
+    Kết quả tìm kiếm cho: "{{ keyword }}"
+</h2>
+
+{% if results %}
+    <div class="new-books-grid">
+        {% for book in results %}
+            <div class="book-card">
+                <img src="{{ book.image_url }}" alt="{{ book.title }}">
+                <h4>{{ book.title }}</h4>
+
+                <p class="author">
+                    {% for author in book.authors.all %}
+                        {{ author.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Không có tác giả
+                    {% endfor %}
+                </p>
+
+                <div class="book-meta">
+                    {% if book.quantity > 0 %}
+                        <span class="status available">Có sẵn</span>
+                    {% else %}
+                        <span class="status borrowed">Đã mượn</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Không tìm thấy kết quả phù hợp.</p>
+{% endif %}
+
+</main>
+{% endblock %}
