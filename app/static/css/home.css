@@ -100,7 +100,7 @@ section {
 
 .search-form {
     display: flex;
-    background: rgba(255, 255, 255, 0.35); /* trong suốt nhẹ */
+    background: rgba(255, 255, 255, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 40px;
@@ -109,7 +109,6 @@ section {
     border: 1px solid rgba(255,255,255,0.45);
 }
 
-/* INPUT */
 .search-form input {
     flex: 1;
     padding: 16px 22px;
@@ -124,11 +123,10 @@ section {
     color: #444;
 }
 
-/* BUTTON */
 .search-form button {
     padding: 0 36px;
     background: rgba(26, 188, 156, 0.9);
-    color: #ffffff;
+    color: #fff;
     border: none;
     font-size: 16px;
     font-weight: 600;
@@ -139,31 +137,6 @@ section {
 .search-form button:hover {
     background: rgba(22, 160, 133, 1);
 }
-
-/* ===============================
-   DOTS
-   =============================== */
-/* .dots {
-    position: absolute;
-    bottom: 14px;
-    width: 100%;
-    text-align: center;
-    z-index: 5;
-}
-
-.dot {
-    height: 10px;
-    width: 10px;
-    background-color: rgba(255,255,255,0.6);
-    border-radius: 50%;
-    display: inline-block;
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-.dot.active {
-    background-color: #1abc9c;
-} */
 
 /* ===============================
    INTRO
@@ -210,7 +183,7 @@ section {
 
 .category-card:hover {
     background: #2563eb;
-    color: #ffffff;
+    color: #fff;
     transform: translateY(-8px);
 }
 
@@ -221,37 +194,22 @@ section {
 /* ===============================
    BOOK SECTION
    =============================== */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.section-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.view-all {
-    color: #2563eb;
+.book-category {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 16px;
     font-weight: 500;
-    text-decoration: none;
 }
 
-.view-all:hover {
-    text-decoration: underline;
-}
-
-/* ===== NEW BOOKS GRID ===== */
 .new-books-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 24px;
+    
+    /* Desktop: 4 card / row => mỗi card ~25% */
+    grid-template-columns: repeat(4, 1fr);
     padding: 16px 0;
 }
 
-/* ===== BOOK CARD ===== */
 .book-card {
     background-color: #fff;
     border-radius: 12px;
@@ -260,9 +218,12 @@ section {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
     cursor: pointer;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    height: auto; /* chiều cao tự động theo nội dung */
 }
 
 .book-card:hover {
@@ -271,8 +232,8 @@ section {
 }
 
 .book-card img {
-    width: 100%;
-    height: 220px;
+    width: 30%;
+    height: 30%;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 12px;
@@ -283,12 +244,18 @@ section {
     font-weight: 600;
     margin: 6px 0;
     color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* giới hạn 1 dòng */
 }
 
 .book-card .author {
     font-size: 13px;
     color: #555;
     margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .book-card .book-meta {
@@ -303,6 +270,9 @@ section {
     background: #f0f0f0;
     padding: 2px 8px;
     border-radius: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .book-card .book-meta .status.available {
@@ -315,12 +285,95 @@ section {
     font-weight: 500;
 }
 
-.book-card .book-stats {
+/* tin mới */
+/* ===============================
+   NEWS SECTION
+   =============================== */
+.news-grid {
     display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #666;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-between; /* căn đều các card */
 }
+
+/* NEWS CARD */
+.news-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* Kích thước cố định */
+    height: 220px;
+
+    /* Chiều ngang cố định */
+    width: calc(25% - 18px); /* 4 thẻ / row, trừ gap */
+    min-width: 200px;
+}
+
+.news-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+.news-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.news-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 6px 0;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.news-card p {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 6px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* tối đa 3 dòng */
+    -webkit-box-orient: vertical;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 1024px) {
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 thẻ trên tablet */
+    }
+    .news-card {
+        height: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .news-grid {
+        grid-template-columns: repeat(1, 1fr); /* 1 thẻ trên mobile */
+    }
+
+    section {
+        padding: 50px 20px;
+    }
+     .news-card {
+        height: 180px;
+    }
+}
+
+
 
 
 /* ===============================
@@ -328,7 +381,7 @@ section {
    =============================== */
 .stats-section {
     background: linear-gradient(135deg, #2563eb, #1e40af);
-    color: #ffffff;
+    color: #fff;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 30px;
@@ -370,7 +423,7 @@ section {
     margin-top: 24px;
     padding: 14px 36px;
     background: #2563eb;
-    color: #ffffff;
+    color: #fff;
     border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
@@ -384,6 +437,25 @@ section {
 /* ===============================
    RESPONSIVE
    =============================== */
+@media (max-width: 1024px) {
+    .banner-slider {
+        height: 320px;
+    }
+
+    .search-overlay {
+        width: 70%;
+        bottom: 30px;
+    }
+
+    .book-card {
+        height: 360px;
+    }
+
+    .new-books-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 card / row trên tablet */
+    }
+}
+
 @media (max-width: 768px) {
     section {
         padding: 50px 20px;
@@ -406,5 +478,28 @@ section {
 
     .search-form {
         background: rgba(255, 255, 255, 0.88);
+    }
+
+    .book-card {
+        height: auto; /* cho mobile card linh hoạt */
+    }
+
+    .new-books-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 card / row trên điện thoại */
+    }
+
+    .book-card h4,
+    .book-card .author {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 480px) {
+    .new-books-grid {
+        grid-template-columns: 1fr; /* 1 card / row trên điện thoại nhỏ */
     }
 }
