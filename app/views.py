@@ -83,7 +83,8 @@ def create_borrow(request):
 
         book = get_object_or_404(Book, pk=book_id)
 
-        user = LibraryUser.objects.first()  # TẠM (sau này thay bằng user login)
+        user_id = request.session.get('user_id')
+        user = get_object_or_404(LibraryUser, pk=user_id)
 
         BorrowRecord.objects.create(
             user=user,
@@ -94,6 +95,7 @@ def create_borrow(request):
         )
 
         return redirect('borrow_request_list')
+
 
 @admin_required
 def admin_borrow_manage(request):
@@ -257,21 +259,27 @@ def resource(request):
 
 
 def borrow_request_list(request):
-    borrow_requests = BorrowRecord.objects.all()
+    user_id = request.session.get('user_id')
+    borrow_requests = BorrowRecord.objects.filter(user_id=user_id)
+
     return render(request, 'app/borrow_request_list.html', {
         'borrow_requests': borrow_requests
     })
 
+
 def fine_list(request):
+    user_id = request.session.get('user_id')
+
     fines = BorrowHistory.objects.select_related(
         'borrow__user',
         'borrow__book',
-        'payment'   # 🔥 QUAN TRỌNG
-    ).order_by('-history_id')
+        'payment'
+    ).filter(borrow__user_id=user_id)
 
     return render(request, 'app/fine_list.html', {
         'fines': fines
     })
+
 
 
 
@@ -280,8 +288,9 @@ def add_review(request, book_id):
         comment = request.POST.get('comment')
         rating = int(request.POST.get('rating'))
 
+        user_id = request.session.get('user_id')
+        user = get_object_or_404(LibraryUser, pk=user_id)
         book = get_object_or_404(Book, book_id=book_id)
-        user = LibraryUser.objects.first()  # tạm thời
 
         sentiment = analyze_sentiment(comment, rating)
 
@@ -294,6 +303,7 @@ def add_review(request, book_id):
         )
 
         return redirect('book_list')
+
 #admin page
 def dashboard(request):
     total_books = Book.objects.count()
