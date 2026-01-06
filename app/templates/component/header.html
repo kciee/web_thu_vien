@@ -16,7 +16,7 @@
         {% if request.session.role == 'admin' %}
             <a href="{% url 'dashboard' %}">Quản trị</a>
         {% else %}
-            <a href="{% url 'book_list' %}">Người dùng</a>
+            <a href="{% url 'book_list' %}"> {{ request.session.full_name }}</a>
         {% endif %}
         <a href="{% url 'logout' %}">Đăng xuất</a>
     {% else %}

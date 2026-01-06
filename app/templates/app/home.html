@@ -47,12 +47,6 @@
         </form>
     </div>
 
-    <!-- DOTS
-    <div class="dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-    </div> -->
 </section>
 
     <!-- INTRO -->
@@ -91,44 +85,47 @@
     </div>
 </section>
 
-<div class="new-books-grid">
-    {% for book in new_books %}
-    <div class="book-card">
-        <img src="{{ book.image_url }}" alt="{{ book.title }}">
-        <h4>{{ book.title }}</h4>
-        <p class="author">
-            {% for author in book.authors.all %}
-                {{ author.name }}{% if not forloop.last %}, {% endif %}
-            {% empty %}
-                Không có tác giả
-            {% endfor %}
-        </p>
-        <div class="book-meta">
-            <span class="tag">
-                   {% with book.categories.all|slice:":4" as top_categories %}
-    {% if top_categories %}
-        {% for cat in top_categories %}
-            {{ cat.category_name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-        {% if book.categories.count > 4 %}
-            , +{{ book.categories.count|add:"-4" }}
-        {% endif %}
-    {% else %}
-        Không có danh mục
-    {% endif %}
-{% endwith %}
-            </span>
-            {% if book.quantity > 0 %}
-                <span class="status available">Có sẵn</span>
-            {% else %}
-                <span class="status borrowed">Đã mượn</span>
-            {% endif %}
+<!-- Tên danh mục chung -->
+<section class="books-section">
+    <h2>Sách mới</h2>
+    <!-- <p class="book-category">Danh mục: Tất cả sách</p> -->
+
+    <div class="new-books-grid">
+        {% for book in new_books %}
+        <div class="book-card">
+            <img src="{{ book.image_url }}" alt="{{ book.title }}">
+            <h4>{{ book.title }}</h4>
+            <p class="author">
+                {% for author in book.authors.all %}
+                    {{ author.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Không có tác giả
+                {% endfor %}
+            </p>
+            <div class="book-meta">
+                {% if book.quantity > 0 %}
+                    <span class="status available">Có sẵn</span>
+                {% else %}
+                    <span class="status borrowed">Đã mượn</span>
+                {% endif %}
+            </div>
         </div>
+        {% empty %}
+        <p>Chưa có sách mới nào.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>Chưa có sách mới nào.</p>
-    {% endfor %}
-</div>
+</section>
+
+<!-- NEWS SECTION -->
+<section class="news-section">
+    <h2>Tin tức</h2>
+
+    <!-- GRID TIN TỨC -->
+    <div class="news-grid" id="news-grid">
+        <p>Đang tải tin tức...</p>
+    </div>
+</section>
+
 
 
 

@@ -12,6 +12,27 @@ from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
 from django.contrib import messages
 from .models import PaymentRequest
+from django.http import JsonResponse
+import feedparser
+
+
+def vnexpress_news(request):
+    try:
+        feed_url = "https://vnexpress.net/rss/tin-moi-nhat.rss"  # RSS feed VN
+        feed = feedparser.parse(feed_url)
+
+        articles = []
+        for entry in feed.entries[:4]:  # lấy 5 bài mới nhất
+            articles.append({
+                "title": entry.title,
+                "url": entry.link,
+                "description": entry.summary,
+            })
+
+        return JsonResponse({"articles": articles})
+    except Exception as e:
+        print("Error fetching news:", e)
+        return JsonResponse({"articles": []})
 
 def calculate_fine(due_date, return_date=None):
     if not return_date:
