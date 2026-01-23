@@ -367,6 +367,17 @@ def publisher_list(request):
 
 def bookList(request):
     books = Book.objects.all().order_by('-book_id')
+
+    query = request.GET.get('q')
+    if query:
+        books = books.filter(
+            Q(title__icontains=query) |
+            Q(authors__name__icontains=query) 
+        ).distinct()
+
+    category_id = request.GET.get('category')
+    if category_id and category_id != "":
+        books = books.filter(categories__category_id=category_id)
     categories = Category.objects.all()
     authors = Author.objects.all()
     publishers = Publisher.objects.all()
