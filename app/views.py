@@ -497,40 +497,43 @@ def add_book(request):
         title = request.POST.get('title')
         price = request.POST.get('price')
         quantity = request.POST.get('quantity')
-        
-        image = request.FILES.get('image') 
+        description = request.POST.get('description') 
         
         publisher_id = request.POST.get('publisher') 
+        author_ids = request.POST.getlist('authors') 
+        category_ids = request.POST.getlist('categories') 
+
+        image_url_path = None
+        if request.FILES.get('image'):
+            upload = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(upload.name, upload)
+            image_url_path = fs.url(filename)
         
-        author_ids = request.POST.getlist('authors')     
-        category_ids = request.POST.getlist('categories')
+        if not publisher_id:
+            publisher_id = None
 
         new_book = Book.objects.create(
             title=title,
             price=price,
             quantity=quantity,
-            image_url=image,     
+            description=description,
+            image_url=image_url_path, 
             publisher_id=publisher_id 
         )
 
         if author_ids:
             for auth_id in author_ids:
                 if auth_id:
-                    BookAuthor.objects.create(
-                        book=new_book,
-                        author_id=auth_id
-                    )
+                    BookAuthor.objects.create(book=new_book, author_id=auth_id)
 
         if category_ids:
             for cat_id in category_ids:
                 if cat_id:
-                    BookCategory.objects.create(
-                        book=new_book,
-                        category_id=cat_id
-                    )
+                    BookCategory.objects.create(book=new_book, category_id=cat_id)
 
-        return redirect('bookList') 
-    
+        return redirect('bookList')
+
     context = {
         'categories': Category.objects.all(),
         'authors': Author.objects.all(),

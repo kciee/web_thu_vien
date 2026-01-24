@@ -9,7 +9,7 @@
         
         <form method="get" action="" class="d-flex gap-2" style="max-width: 500px;">
     
-    <select name="category" class="form-select form-select-sm" style="width: 150px;">
+    <select name="category" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
         <option value="">-- Tất cả --</option>
         {% for cat in categories %}
             <option value="{{ cat.category_id }}" 
