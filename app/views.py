@@ -354,15 +354,24 @@ def dashboard(request):
     return render(request, 'app/dashboard.html', context)
 
 def category_list(request):
-    categories = Category.objects.all()
+    categories = Category.objects.all().order_by('-category_id') 
+    query = request.GET.get('q')
+    if query:
+        categories = categories.filter(category_name__icontains=query)
     return render(request, 'app/category_list.html', {'categories': categories})
 
 def author_list(request):
-    authors = Author.objects.all()
+    authors = Author.objects.all().order_by('-author_id')
+    query = request.GET.get('q')
+    if query:
+        authors = authors.filter(name__icontains=query)
     return render(request, 'app/author_list.html', {'authors': authors})
 
 def publisher_list(request):
-    publishers = Publisher.objects.all()
+    publishers = Publisher.objects.all().order_by('-publisher_id')
+    query = request.GET.get('q')
+    if query:
+        publishers = publishers.filter(name__icontains=query)
     return render(request, 'app/publisher_list.html', {'publishers': publishers})
 
 def bookList(request):
