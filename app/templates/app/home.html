@@ -128,11 +128,11 @@
      data-title="{{ book.title }}"
      data-image="{{ book.image_url }}"
      data-authors="{% for author in book.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
-     data-status="{% if book.quantity > 0 %}Có sẵn{% else %}Đã mượn{% endif %}"
+     data-status="{% if book.quantity > 0 %}Có sẵn{% else %}Đã hết{% endif %}"
      data-quantity="{{ book.quantity }}"
      data-description="{{ book.description|default:'Không có mô tả' }}">
 
-            <img src="{{ book.image_url }}" alt="{{ book.title }}">
+            <img src="{% static 'images/' %}{{ book.image_url }}" alt="{{ book.title }}">
             <h4>{{ book.title }}</h4>
             <p class="author">
                 {% for author in book.authors.all %}

@@ -73,8 +73,8 @@ def calculate_fine(due_date, return_date=None):
 
     if days_late <= 0:
         return 0, 0
-    elif days_late <= 7:
-        return days_late, days_late * 5000
+    elif days_late <= 15:
+        return days_late, days_late * 1000
     else:
         return days_late, 100000
 
@@ -138,6 +138,23 @@ def create_borrow(request):
         user_id = request.session.get('user_id')
         user = get_object_or_404(LibraryUser, pk=user_id)
 
+        # 🔹 ĐẾM SỐ SÁCH ĐANG MƯỢN
+        current_borrow_count = BorrowRecord.objects.filter(
+            user=user,
+            status__in=['borrowing', 'pending']   # đang mượn hoặc đang chờ duyệt
+        ).count()
+
+        # 🔹 NẾU ĐÃ MƯỢN ĐỦ 2 QUYỂN → KHÔNG CHO MƯỢN NỮA
+        if current_borrow_count >= 2:
+            messages.error(request, "Bạn chỉ được mượn tối đa 2 quyển cùng lúc.")
+            return redirect('book_list')
+
+        # 🔹 KIỂM TRA SỐ LƯỢNG SÁCH CÒN
+        if book.quantity <= 0:
+            messages.error(request, "Sách này đã hết.")
+            return redirect('book_list')
+
+        # 🔹 TẠO PHIẾU MƯỢN
         BorrowRecord.objects.create(
             user=user,
             book=book,
@@ -146,7 +163,13 @@ def create_borrow(request):
             status='pending'
         )
 
+        messages.success(
+            request,
+            f"Mượn sách thành công. Bạn còn có thể mượn thêm {2 - current_borrow_count - 1} quyển nữa."
+        )
+
         return redirect('borrow_request_list')
+
 
 
 @admin_required

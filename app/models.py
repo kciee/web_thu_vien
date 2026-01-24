@@ -89,7 +89,7 @@ class LibraryUser(models.Model):
     password = models.CharField(max_length=255, null=True, blank=True)
     full_name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(max_length=100, unique=True, null=True, blank=True)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
     role = models.CharField(max_length=20, null=True, blank=True)
 
     class Meta:

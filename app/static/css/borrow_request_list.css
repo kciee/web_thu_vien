@@ -5,21 +5,27 @@
     padding: 0;
 }
 
-body {
+
+
+
+.body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: #f4f6f9;
     color: #1f2933;
 }
+
+.logo-image {
+    width: 130px;
+    height: 130px;
+}
+
 .logo {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.logo-image {
-    width: 40px;
-    height: 40px;
-}
+
 /* ================= LAYOUT ================= */
 .layout {
     display: flex;
@@ -35,8 +41,8 @@ body {
 }
 
 .sidebar .logo {
-    font-size: 20px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-bottom: 30px;
 }
 

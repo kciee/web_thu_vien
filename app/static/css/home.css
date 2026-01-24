@@ -515,9 +515,9 @@ section {
     height: 60%;
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 12px;
+    margin: 0 auto 12px auto;   /* căn giữa ngang */
+    display: block;            /* rất quan trọng */
 }
-
 .book-card h4 {
     font-size: 16px;
     font-weight: 600;

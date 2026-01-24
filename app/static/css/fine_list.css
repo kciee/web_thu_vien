@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+.logo-image {
+    width: 130px;
+    height: 130px;
+}
+
 body {
     font-family: "Segoe UI", Arial, sans-serif;
     background: #f4f6f9;
@@ -32,8 +37,9 @@ body {
 }
 
 .logo-image {
-    width: 42px;
-    height: 42px;
+    width: 130px;
+    height: 130px;
+
 }
 
 .sidebar ul {
