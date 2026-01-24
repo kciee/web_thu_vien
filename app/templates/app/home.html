@@ -50,40 +50,71 @@
 </section>
 
     <!-- INTRO -->
-<section class="intro-section">
-    <h2>Về LibraryHub</h2>
-    <p>
-        LibraryHub là nền tảng thư viện số hiện đại, cung cấp hàng nghìn đầu sách,
-        tài liệu học tập và nghiên cứu dành cho sinh viên, giảng viên và người yêu tri thức.
-    </p>
-</section>
+<div class="home-container">
 
-<!-- CATEGORIES -->
-<section class="categories-section">
-    <h2>Danh mục tài nguyên</h2>
+    <!-- INTRO SECTION (TRÁI) -->
+    <div class="left-column">
+    <div class="intro-section">
+        <h1>Chào mừng đến với LibraryHub</h1>
+        <p>
+            Nơi quản lý và khám phá kho sách phong phú,  
+            mượn – trả – đánh giá sách bằng AI.
+        </p>
 
-    <div class="categories-grid">
-        <div class="category-card">
-            <h3>Sách học tập</h3>
-            <p>Giáo trình, sách tham khảo</p>
-        </div>
+        <a href="{% url 'book_list' %}" class="btn-start">
+    <i class="fa fa-book"></i>&nbsp; Khám phá sách
+</a>
 
-        <div class="category-card">
-            <h3>Tài liệu nghiên cứu</h3>
-            <p>Luận văn, bài báo khoa học</p>
-        </div>
+    </div>
 
-        <div class="category-card">
-            <h3>Công nghệ</h3>
-            <p>Lập trình, AI, Data</p>
-        </div>
-
-        <div class="category-card">
-            <h3>Kỹ năng & xã hội</h3>
-            <p>Kỹ năng mềm, kinh tế</p>
+    <div class="visit">
+            <h4>Giờ mở cửa</h4>
+            <ul>
+                <li>Thứ 2 - 6: 08:00 - 20:00</li>
+                <li>Thứ 7: 09:00 - 17:00</li>
+                <li>CN: Đóng cửa</li>
+            </ul>
         </div>
     </div>
-</section>
+    <!-- NEW SECTION (PHẢI) -->
+    <div class="news-section">
+    <h2>Tin tức</h2>
+
+    <!-- GRID TIN TỨC -->
+    <div class="news-grid" id="news-grid">
+        <p>Đang tải tin tức...</p>
+    </div>
+    </div>
+
+</div>
+
+
+<!-- CATEGORIES -->
+    <section class="categories-section">
+        <h2>Danh mục tài nguyên</h2>
+
+        <div class="categories-grid">
+            <div class="category-card">
+                <h3>Sách học tập</h3>
+                <p>Giáo trình, sách tham khảo</p>
+            </div>
+
+            <div class="category-card">
+                <h3>Tài liệu nghiên cứu</h3>
+                <p>Luận văn, bài báo khoa học</p>
+            </div>
+
+            <div class="category-card">
+                <h3>Công nghệ</h3>
+                <p>Lập trình, AI, Data</p>
+            </div>
+
+            <div class="category-card">
+                <h3>Kỹ năng & xã hội</h3>
+                <p>Kỹ năng mềm, kinh tế</p>
+            </div>
+        </div>
+    </section>
 
 <!-- Tên danh mục chung -->
 <section class="books-section">
@@ -91,8 +122,16 @@
     <!-- <p class="book-category">Danh mục: Tất cả sách</p> -->
 
     <div class="new-books-grid">
-        {% for book in new_books %}
-        <div class="book-card">
+        {% for book in new_books|slice:":4" %}
+        <div class="book-card"
+     data-id="{{ book.id }}"
+     data-title="{{ book.title }}"
+     data-image="{{ book.image_url }}"
+     data-authors="{% for author in book.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+     data-status="{% if book.quantity > 0 %}Có sẵn{% else %}Đã mượn{% endif %}"
+     data-quantity="{{ book.quantity }}"
+     data-description="{{ book.description|default:'Không có mô tả' }}">
+
             <img src="{{ book.image_url }}" alt="{{ book.title }}">
             <h4>{{ book.title }}</h4>
             <p class="author">
@@ -116,47 +155,24 @@
     </div>
 </section>
 
-<!-- NEWS SECTION -->
-<section class="news-section">
-    <h2>Tin tức</h2>
+<div class="book-modal" id="bookModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModal">&times;</span>
 
-    <!-- GRID TIN TỨC -->
-    <div class="news-grid" id="news-grid">
-        <p>Đang tải tin tức...</p>
+        <div class="modal-body">
+            <img id="modalImage" src="" alt="">
+
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p><strong>Tác giả:</strong> <span id="modalAuthors"></span></p>
+                <p><strong>Trạng thái:</strong> <span id="modalStatus"></span></p>
+                <p id="modalDescription"></p>
+
+                <button id="borrowBtn" class="borrow-btn">Mượn sách</button>
+            </div>
+        </div>
     </div>
-</section>
-
-
-
-
-
-
-<!-- STATS -->
-<section class="stats-section">
-    <div class="stat-box">
-        <h3>10,000+</h3>
-        <p>Đầu sách</p>
-    </div>
-    <div class="stat-box">
-        <h3>5,000+</h3>
-        <p>Người dùng</p>
-    </div>
-    <div class="stat-box">
-        <h3>1,200+</h3>
-        <p>Tài liệu</p>
-    </div>
-    <div class="stat-box">
-        <h3>24/7</h3>
-        <p>Truy cập</p>
-    </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-    <h2>Bắt đầu khám phá tri thức ngay hôm nay</h2>
-    <p>Đăng ký để lưu sách yêu thích và tải tài liệu miễn phí</p>
-    <button onclick="openAuthPopup()" class="cta-button">Tham gia ngay</button>
-</section>
+</div>
 
 </main>
 {% endblock %}

@@ -33,31 +33,74 @@ const newsGrid = document.getElementById('news-grid');
 
 async function loadNews() {
     try {
-        const response = await fetch('/api/news/'); // gọi Django view
+        const response = await fetch('/api/news/');
         const data = await response.json();
 
         newsGrid.innerHTML = '';
 
-        if (data.articles.length === 0) {
+        if (!data.articles || data.articles.length === 0) {
             newsGrid.innerHTML = '<p>Không có tin tức mới.</p>';
             return;
         }
 
         data.articles.forEach(news => {
-            const card = document.createElement('div');
-            card.classList.add('news-card');
-            card.innerHTML = `
-                <a href="${news.url}" target="_blank">
-                    <h4>${news.title}</h4>
-                    <p>${news.description || ''}</p>
+            const div = document.createElement('div');
+            div.className = 'news-row';
+
+            div.innerHTML = `
+                <a href="${news.url}" target="_blank" class="news-link">
+                    <img class="news-image" src="${news.image || 'https://via.placeholder.com/120'}">
+                    <div class="news-text">
+                        <h4>${news.title}</h4>
+                        <p>${news.description || ''}</p>
+                    </div>
                 </a>
             `;
-            newsGrid.appendChild(card);
+
+            newsGrid.appendChild(div);
         });
-    } catch (err) {
-        console.error(err);
+
+    } catch (e) {
+        console.error(e);
         newsGrid.innerHTML = '<p>Không thể tải tin tức.</p>';
     }
 }
 
 loadNews();
+
+
+
+document.querySelectorAll('.book-card').forEach(card => {
+    card.addEventListener('click', () => {
+
+        // Lấy dữ liệu từ data-*
+        const title = card.dataset.title;
+        const image = card.dataset.image;
+        const authors = card.dataset.authors;
+        const status = card.dataset.status;
+        const description = card.dataset.description;
+
+        // Gán vào modal
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalImage').src = image;
+        document.getElementById('modalAuthors').innerText = authors;
+        document.getElementById('modalStatus').innerText = status;
+        document.getElementById('modalDescription').innerText = description;
+
+        // Hiện modal
+        document.getElementById('bookModal').style.display = 'flex';
+    });
+});
+
+// Đóng modal
+document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('bookModal').style.display = 'none';
+});
+
+// Click ra ngoài để đóng
+document.getElementById('bookModal').addEventListener('click', (e) => {
+    if (e.target.id === 'bookModal') {
+        document.getElementById('bookModal').style.display = 'none';
+    }
+});
+
