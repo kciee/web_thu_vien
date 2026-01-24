@@ -1,67 +1,70 @@
-<div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+<div class="modal fade" id="addBookModal" tabindex="-1">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white py-2">
-                <h5 class="modal-title fs-6">Thêm Sách Mới</h5>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Thêm Sách Mới</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             
-            <div class="modal-body">
-                <form action="{% url 'add_book' %}" method="POST" enctype="multipart/form-data" id="addBookForm">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Tên sách <span class="text-danger">*</span></label>
-                            <input type="text" name="title" class="form-control form-control-sm" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Ảnh bìa</label>
-                            <input type="file" name="image" class="form-control form-control-sm">
-                        </div>
+            <form action="{% url 'add_book' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tên sách</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small">Tác giả</label>
-                            <select name="author" class="form-select form-select-sm">
-                                <option value="">-- Chọn tác giả --</option>
-                                {% for author in authors %}
-                                    <option value="{{ author.author_id }}">{{ author.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small">Thể loại</label>
-                            <select name="category" class="form-select form-select-sm">
-                                <option value="">-- Chọn thể loại --</option>
-                                {% for cat in categories %}
-                                    <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small">Nhà xuất bản</label>
-                            <select name="publisher" class="form-select form-select-sm">
-                                <option value="">-- Chọn NXB --</option>
-                                {% for pub in publishers %}
-                                    <option value="{{ pub.publisher_id }}">{{ pub.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ảnh bìa</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Giá tiền</label>
-                            <input type="number" name="price" class="form-control form-control-sm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Giá tiền</label>
+                            <input type="number" name="price" class="form-control" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small">Số lượng</label>
-                            <input type="number" name="quantity" class="form-control form-control-sm" value="1">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Số lượng</label>
+                            <input type="number" name="quantity" class="form-control" value="1" required>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer py-1 bg-light">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="addBookForm" class="btn btn-sm btn-primary px-4">Lưu Sách</button>
-            </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nhà xuất bản</label>
+                        <select name="publisher" class="form-select" required>
+                            <option value="">-- Chọn NXB --</option>
+                            {% for pub in publishers %}
+                                <option value="{{ pub.publisher_id }}">{{ pub.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tác giả (Giữ Ctrl để chọn nhiều)</label>
+                        <select name="authors" class="form-select" multiple size="3" required>
+                            {% for auth in authors %}
+                                <option value="{{ auth.author_id }}">{{ auth.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Thể loại (Giữ Ctrl để chọn nhiều)</label>
+                        <select name="categories" class="form-select" multiple size="3" required>
+                            {% for cat in categories %}
+                                <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu sách</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
