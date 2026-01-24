@@ -1,6 +1,6 @@
 
 from django.shortcuts import render
-from .models import Book, Category, LibraryUser, Author, Publisher
+from .models import Book, Category, LibraryUser, Author, Publisher, BookAuthor, BookCategory
 from django.shortcuts import redirect, get_object_or_404
 from .models import BorrowRecord
 from .models import BorrowHistory
@@ -495,30 +495,48 @@ def edit_publisher(request, publisher_id):
 def add_book(request):
     if request.method == 'POST':
         title = request.POST.get('title')
-        author = request.POST.get('author')
-        category_id = request.POST.get('category')
-        publisher = request.POST.get('publisher')
         price = request.POST.get('price')
         quantity = request.POST.get('quantity')
         
-        image = request.FILES.get('image')
+        image = request.FILES.get('image') 
+        
+        publisher_id = request.POST.get('publisher') 
+        
+        author_ids = request.POST.getlist('authors')     
+        category_ids = request.POST.getlist('categories')
 
-        try:
-            category = Category.objects.get(pk=category_id)
-        except Category.DoesNotExist:
-            category = None
-
-        Book.objects.create(
+        new_book = Book.objects.create(
             title=title,
             price=price,
             quantity=quantity,
-            image_url=image 
+            image_url=image,     
+            publisher_id=publisher_id 
         )
+
+        if author_ids:
+            for auth_id in author_ids:
+                if auth_id:
+                    BookAuthor.objects.create(
+                        book=new_book,
+                        author_id=auth_id
+                    )
+
+        if category_ids:
+            for cat_id in category_ids:
+                if cat_id:
+                    BookCategory.objects.create(
+                        book=new_book,
+                        category_id=cat_id
+                    )
 
         return redirect('bookList') 
     
-    categories = Category.objects.all()
-    return render(request, 'app/add_book.html')
+    context = {
+        'categories': Category.objects.all(),
+        'authors': Author.objects.all(),
+        'publishers': Publisher.objects.all()
+    }
+    return render(request, 'app/add_book.html', context)
 def delete_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     book.delete()
