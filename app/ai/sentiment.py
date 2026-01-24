@@ -1,39 +1,34 @@
-from textblob import TextBlob
+from transformers import pipeline
 
-NEGATIVE_WORDS = [
-    "tệ", "tệ hại", "xấu", "dở",
-    "khó chịu", "chán", "bực", "kinh khủng", "thất vọng", "đáng ghét", "khủng khiếp", "tồi", "dở ẹc","không tốt"
-]
 
-POSITIVE_WORDS = [
-    "hay", "tốt", "tuyệt vời", "xuất sắc", "đỉnh", "tuyệt", "đẹp", "thú vị", "vui", "hài lòng", "tuyệt vời", "hoàn hảo", "xuất sắc","ổn"
-]
+classifier = pipeline(
+    "sentiment-analysis",
+    model="wonrax/phobert-base-vietnamese-sentiment"
+)
 
-from textblob import TextBlob
+label_map = {
+    "POS": "positive",
+    "NEG": "negative",
+    "NEU": "neutral"
+}
 
-def analyze_sentiment(text, rating):
-    text = text.lower()
+def analyze_sentiment(comment, rating=None):
+    """
+    Phân tích cảm xúc từ comment
+    Trả về: positive / negative / neutral
+    """
 
-    # 1. Phân tích nội dung
-    if any(w in text for w in NEGATIVE_WORDS):
-        text_sentiment = "negative"
-    elif any(w in text for w in POSITIVE_WORDS):
-        text_sentiment = "positive"
-    else:
-        text_sentiment = "neutral"
+    if not comment or comment.strip() == "":
+        return "neutral"
 
-    # 2. Phân tích sao
-    if rating <= 2:
-        star_sentiment = "negative"
-    elif rating == 3:
-        star_sentiment = "neutral"
-    else:
-        star_sentiment = "positive"
+    try:
+        result = classifier([comment])[0]
+        label = result['label']
 
-    # 3. KẾT HỢP
-    if text_sentiment == star_sentiment:
-        return text_sentiment
+        sentiment = label_map.get(label, "neutral")
 
-    # Nếu mâu thuẫn → trung lập
-    return "neutral"
+        return sentiment
 
+    except Exception as e:
+        print("Sentiment error:", e)
+        return "neutral"

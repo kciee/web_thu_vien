@@ -49,10 +49,11 @@ async function loadNews() {
 
             div.innerHTML = `
                 <a href="${news.url}" target="_blank" class="news-link">
-                    <img class="news-image" src="${news.image || 'https://via.placeholder.com/120'}">
+                    <img class="news-image" 
+                         src="${news.image || 'https://via.placeholder.com/120'}" 
+                         alt="">
                     <div class="news-text">
                         <h4>${news.title}</h4>
-                        <p>${news.description || ''}</p>
                     </div>
                 </a>
             `;
@@ -61,13 +62,12 @@ async function loadNews() {
         });
 
     } catch (e) {
-        console.error(e);
+        console.error("JS ERROR:", e);
         newsGrid.innerHTML = '<p>Không thể tải tin tức.</p>';
     }
 }
 
-loadNews();
-
+document.addEventListener("DOMContentLoaded", loadNews);
 
 
 document.querySelectorAll('.book-card').forEach(card => {

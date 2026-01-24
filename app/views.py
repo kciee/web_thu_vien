@@ -16,25 +16,55 @@ from django.http import JsonResponse
 import feedparser
 from django.db.models import Q
 
+from django.http import JsonResponse
 
-def vnexpress_news(request):
+
+
+
+
+import feedparser
+import requests
+from bs4 import BeautifulSoup
+from django.http import JsonResponse
+
+def baothanhnien_news(request):
     try:
-        feed_url = "https://vnexpress.net/rss/tin-moi-nhat.rss"  # RSS feed VN
-        feed = feedparser.parse(feed_url)
+        url = "https://thanhnien.vn/rss/home.rss"
+        feed = feedparser.parse(url)
 
         articles = []
-        for entry in feed.entries[:4]:  # lấy 5 bài mới nhất
+
+        for entry in feed.entries[:4]:
+            image = ""
+
+            # 🔹 LẤY ẢNH TỪ TRANG BÀI VIẾT (og:image)
+            try:
+                headers = {
+                    "User-Agent": "Mozilla/5.0"
+                }
+                res = requests.get(entry.link, headers=headers, timeout=5)
+                soup = BeautifulSoup(res.text, "html.parser")
+
+                og_img = soup.find("meta", property="og:image")
+                if og_img:
+                    image = og_img.get("content", "")
+
+            except Exception as e:
+                print("IMAGE ERROR:", e)
+
             articles.append({
                 "title": entry.title,
                 "url": entry.link,
-                "description": entry.summary,
+                "image": image,
             })
 
         return JsonResponse({"articles": articles})
+
     except Exception as e:
-        print("Error fetching news:", e)
+        print("API ERROR:", e)
         return JsonResponse({"articles": []})
 
+    
 def calculate_fine(due_date, return_date=None):
     if not return_date:
         return_date = date.today()
